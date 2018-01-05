@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import PostagemItem from './PostagemItem';
+import ModalPostagem from './ModalPostagem';
 
 class Postagens extends Component {
     constructor(props) {
@@ -9,9 +10,20 @@ class Postagens extends Component {
         this.state = {
             postagens: [
                 {
-
+                    titulo: '',
+                    corpo: '',
+                    autor: '',
+                    numeroComentario: '',
+                    pontuacao: '',
+                    comentarios: [
+                        {
+                            comentario: '',
+                            autor: '',
+                            pontuacao: ''
+                        }
+                    ]
                 }
-            ]
+            ],
         }
     }
     render () {
@@ -24,6 +36,9 @@ class Postagens extends Component {
                             <PostagemItem postagens={postagens} />
                         );
                     })}
+                </div>
+                <div>
+                    <ModalPostagem />
                 </div>
             </div>
         );
