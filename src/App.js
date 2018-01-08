@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import NavBar from './shared/layout/NavBar';
+import Layout from './shared/layout/Layout';
 
 class App extends Component {
   render() {
     return (
-      <div className="container-fluid">
-        <NavBar />
-        {this.props.children}
+      <div>
+        <Layout />
       </div>
     );
   }

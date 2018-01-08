@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const ModalCategoria = ({ isOpen, closeModal, categoria, insertCategoria, handleChange }) => {
+const ModalComment = ({ isOpen, closeModal, categoria, insertCategoria, handleChange }) => {
     return (
         <div>
             <Modal
@@ -11,7 +11,7 @@ const ModalCategoria = ({ isOpen, closeModal, categoria, insertCategoria, handle
                 
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Cadastro de Categoria</h5>
+                        <h5 className="modal-title">Cadastro de Comment</h5>
                     </div>
                     <div className="modal-body">
                         <div className="container">
@@ -38,4 +38,4 @@ const ModalCategoria = ({ isOpen, closeModal, categoria, insertCategoria, handle
     );
 }
 
-export default ModalCategoria;
+export default ModalComment;

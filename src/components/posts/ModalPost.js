@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const ModalPostagem = ({ isOpen, closeModal, postagem, insertPostagem, handleChange }) => {
+const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange }) => {
     return (
         <div>
             <Modal
@@ -11,29 +11,29 @@ const ModalPostagem = ({ isOpen, closeModal, postagem, insertPostagem, handleCha
                 
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Cadastro de Postagem</h5>
+                        <h5 className="modal-title">Cadastro de Post</h5>
                     </div>
                     <div className="modal-body">
                         <div className="container">
-                            <form onSubmit={insertPostagem}>
+                            <form onSubmit={insertPost}>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <label htmlFor="titulo">Titulo</label>
-                                        <input type="text" name="titulo" className="form-control" id="titulo" placeholder="Titulo" value={postagem.titulo} onChange={handleChange.bind(this)} required/>
+                                        <input type="text" name="titulo" className="form-control" id="titulo" placeholder="Titulo" value={post.titulo} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />
                                 <div className="row">
                                     <div className="col-md-12">
                                         <label htmlFor="corpo">Corpo</label>
-                                        <input type="text" name="corpo" className="form-control" id="corpo" placeholder="Corpo" value={postagem.corpo} onChange={handleChange.bind(this)} required/>
+                                        <input type="text" name="corpo" className="form-control" id="corpo" placeholder="Corpo" value={post.corpo} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />
                                 <div className="row">
                                     <div className="col-md-12">
                                         <label htmlFor="autor">Autor</label>
-                                        <input type="text" name="autor" className="form-control" id="autor" placeholder="Autor" value={postagem.autor} onChange={handleChange.bind(this)} required/>
+                                        <input type="text" name="autor" className="form-control" id="autor" placeholder="Autor" value={post.autor} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />
@@ -52,4 +52,4 @@ const ModalPostagem = ({ isOpen, closeModal, postagem, insertPostagem, handleCha
     );
 }
 
-export default ModalPostagem;
+export default ModalPost;

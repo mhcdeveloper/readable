@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Comentarios = ({ comentario }) => {
+const Comments = ({ comment }) => {
     return (
         <div>
-            <span>{comentario.autor}</span>
-            <span>{comentario.pontuacao}</span>
+            <span>{comment.autor}</span>
+            <span>{comment.pontuacao}</span>
             <button className="btn btn-info">Votar</button>
             <button className="btn btn-info">Editar</button>
             <button className="btn btn-info">Excluir</button>
@@ -12,4 +12,4 @@ const Comentarios = ({ comentario }) => {
     );
 }
 
-export default Comentarios;
+export default Comments;
