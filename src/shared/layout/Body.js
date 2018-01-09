@@ -1,7 +1,7 @@
 import React from 'react';
 import Route from 'react-router-dom/Route';
 
-import Posts from '../../components/postagens/Posts';
+import Posts from '../../components/posts/Posts';
 
 const Body = () => {
     return (
