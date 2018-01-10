@@ -3,3 +3,36 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.btn-card-post {
+  text-align: right;
+}
+
+.detail-card-post {
+  background-color: #333; 
+  border-color: #333;
+}
+
+.count-comment {
+  color: #fff;
+}
+
+.open-modal-post {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+}
+
+.open-modal-post button {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #1976D2;
+  background-image: url('./shared/icons/add.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 28px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  font-size: 0;
+}

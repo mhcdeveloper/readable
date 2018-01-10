@@ -21,6 +21,7 @@ class Posts extends Component {
                 voteScore: '',
             },
             posts: [],
+            modalIsOpen: false
         }
     }
 
@@ -29,6 +30,18 @@ class Posts extends Component {
             .then((posts) => this.setState({ posts }));
 
         console.log(this.state.posts);
+    }
+
+    openModal = () => {
+        this.setState({
+            modalIsOpen: true
+        });
+    }
+
+    closeModal = () => {
+        this.setState({
+            modalIsOpen: false
+        })
     }
 
     handleChange = (e) => {
@@ -41,9 +54,12 @@ class Posts extends Component {
     }
 
     render () {
-        const { posts, post } = this.state;
+        const { posts, post, modalIsOpen } = this.state;
         return (
             <div>
+                <div className="open-modal-post">
+                    <button onClick={this.openModal}>+</button>
+                </div>
                 <div>
                     {posts.map((post) => {
                         return (
@@ -56,6 +72,8 @@ class Posts extends Component {
                 </div>
                 <div>
                     <ModalPost 
+                        isOpen={modalIsOpen}
+                        closeModal={this.closeModal}
                         post={post} 
                         handleChange={this.handleChange}
                     />
