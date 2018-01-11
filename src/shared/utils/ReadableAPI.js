@@ -5,24 +5,30 @@ const headers = {
   'Authorization': "marcos"
 }
 
-export const get = (bookId) =>
-  fetch(`${url}/books/${bookId}`, { headers })
-    .then(res => res.json())
-    .then(data => data.book)
-
 //GetAll busca todos os posts
 export const getAll = () =>
   fetch(`${url}/posts`, { headers })
     .then(res => res.json())
     .catch(err => console.log(err))
-    
 
+//Get detail of a single post
+export const getDetail = (id) =>
+  fetch(`${url}/posts/${id}`, { headers })
+  .then(res => res.json())
+  .catch(err => console.log(err))
+  
 //GetAll busca todos os comentarios
-export const getComent = () =>
+export const getComment = () =>
 fetch(`${url}/coments`, { headers })
   .then(res => res.json())
   .catch(err => console.log(err))
 
+//Get comments of a single post
+export const getCommentPost = (id) =>
+  fetch(`${url}/posts/${id}/comments`, { headers })
+  .then(res => res.json())
+  .catch(err => console.log(err))
+  
 
 export const update = (book, shelf) =>
   fetch(`${url}/books/${book.id}`, {

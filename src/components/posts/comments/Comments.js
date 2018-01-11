@@ -2,12 +2,18 @@ import React from 'react';
 
 const Comments = ({ comment }) => {
     return (
-        <div>
-            <span>{comment.autor}</span>
-            <span>{comment.pontuacao}</span>
-            <button className="btn btn-info">Votar</button>
-            <button className="btn btn-info">Editar</button>
-            <button className="btn btn-info">Excluir</button>
+        <div className="card">
+            <div className="card-block">
+                <p className="card-text">{comment.body}</p>
+                <p className="card-text">{comment.author}</p>
+                <p className="card-text">
+                    <small className="text-muted">{comment.voteScore} <i className="glyphicon glyphicon-thumbs-up"></i></small>
+                </p>
+            </div>
+            <div className="card-block">
+                <a href="#" className="card-link"><i className="glyphicon glyphicon-edit"></i></a>
+                <a href="#" className="card-link"><i className="glyphicon glyphicon-trash"></i></a>
+            </div>
         </div>
     );
 }

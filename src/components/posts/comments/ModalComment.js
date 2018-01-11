@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const ModalComment = ({ isOpen, closeModal, categoria, insertCategoria, handleChange }) => {
+const ModalComment = ({ isOpen, closeModal, comment, insertComment, handleChange }) => {
     return (
         <div>
             <Modal
@@ -15,11 +15,11 @@ const ModalComment = ({ isOpen, closeModal, categoria, insertCategoria, handleCh
                     </div>
                     <div className="modal-body">
                         <div className="container">
-                            <form onSubmit={insertCategoria}>
+                            <form onSubmit={insertComment}>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <label htmlFor="descricao">Descrição</label>
-                                        <input type="text" name="descricao" className="form-control" id="descricao" placeholder="Descrição" value={comentario.descricao} onChange={handleChange.bind(this)} required/>
+                                        <label htmlFor="descricao">Body</label>
+                                        <input type="text" name="descricao" className="form-control" id="descricao" placeholder="Descrição" value={comment.body} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />
