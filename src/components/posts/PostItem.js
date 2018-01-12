@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const PostItem = ({ post, metodoDeVoto, upVote, downVote }) => {
+const PostItem = ({ post, metodoDeVoto, upVote, downVote, editPost, removePost }) => {
     return (
         <div>
             <div className="card">
@@ -16,8 +16,8 @@ const PostItem = ({ post, metodoDeVoto, upVote, downVote }) => {
                     <a href="#" className="btn btn-primary"><i className="glyphicon glyphicon-thumbs-down" onClick={downVote}></i></a>
                     <div className="btn-card-post">
                         <Link to={`/posts/detail/${post.id}`} className="btn btn-primary"><i className="glyphicon glyphicon-eye-open"></i></Link>
-                        <a href="#" className="btn btn-info"><i className="glyphicon glyphicon-edit"></i></a>
-                        <a href="#" className="btn btn-danger"><i className="glyphicon glyphicon-trash"></i></a>
+                        <a href="#" className="btn btn-info" onClick={() => editPost(post)}><i className="glyphicon glyphicon-edit"></i></a>
+                        <a href="#" className="btn btn-danger" onClick={() => removePost(post)}><i className="glyphicon glyphicon-trash"></i></a>
                     </div>
                 </div>
             </div>

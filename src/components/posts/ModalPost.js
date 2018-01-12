@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange }) => {
+const ModalPost = ({ isOpen, openModal, post, insertPost, handleChange }) => {
     return (
         <div>
             <Modal
@@ -18,28 +18,28 @@ const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange }) => {
                             <form onSubmit={insertPost}>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <label htmlFor="titulo">Titulo</label>
-                                        <input type="text" name="titulo" className="form-control" id="titulo" placeholder="Titulo" value={post.titulo} onChange={handleChange.bind(this)} required/>
+                                        <label htmlFor="title">Title</label>
+                                        <input type="text" name="title" className="form-control" id="title" placeholder="Title" value={post.title} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <label htmlFor="corpo">Corpo</label>
-                                        <input type="text" name="corpo" className="form-control" id="corpo" placeholder="Corpo" value={post.corpo} onChange={handleChange.bind(this)} required/>
+                                        <label htmlFor="body">Body</label>
+                                        <textarea type="text" rows="3" name="body" className="form-control" id="body" placeholder="Body" value={post.body} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <label htmlFor="autor">Autor</label>
-                                        <input type="text" name="autor" className="form-control" id="autor" placeholder="Autor" value={post.autor} onChange={handleChange.bind(this)} required/>
+                                        <label htmlFor="author">Author</label>
+                                        <input type="text" name="author" className="form-control" id="author" placeholder="Author" value={post.author} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />
                                 <div className="row">
                                     <div>
-                                        <button type="button" className="btn btn-info" onClick={closeModal}>Cancelar</button>
+                                        <button type="button" className="btn btn-info" onClick={openModal}>Cancelar</button>
                                         <button className="btn btn-primary">Salvar</button>
                                     </div>
                                 </div>

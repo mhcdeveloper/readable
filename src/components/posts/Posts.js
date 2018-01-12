@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import * as ReadableAPI  from '../../shared/utils/ReadableAPI';
+import Modal from 'react-modal';
+import serializeForm from 'form-serialize';
 
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
+import ModalRemove from '../../shared/ModalRemove';
 
 class Posts extends Component {
     constructor(props) {
@@ -21,11 +24,13 @@ class Posts extends Component {
                 voteScore: '',
             },
             posts: [],
-            modalIsOpen: false
+            modalIsOpen: false,
+            isModalRemove: false
         }
     }
 
     componentDidMount() {
+        Modal.setAppElement('body');
         ReadableAPI.getAll()
             .then((posts) => this.setState({ posts }));
 
@@ -34,14 +39,23 @@ class Posts extends Component {
 
     openModal = () => {
         this.setState({
-            modalIsOpen: true
+            modalIsOpen: !this.state.modalIsOpen
+        });
+    }    
+
+    //Metodo responsavel por abrir o modalRemove
+    openModalRemove = (post) => {
+        this.setState({
+            isModalRemove: !this.state.isModalRemove,
+            post
         });
     }
 
-    closeModal = () => {
+    closeModalRemove = () => {
         this.setState({
-            modalIsOpen: false
-        })
+            modalIsOpen: false,
+            isModalRemove: false
+        });
     }
 
     handleChange = (e) => {
@@ -53,8 +67,32 @@ class Posts extends Component {
         })
     }
 
+    insertPost = (e) => {
+        e.preventDefault();
+        const values = serializeForm(e.target, { hash: true });
+        const { post } = this.state;
+        if (post.id) {
+            this.editPost(values);
+        } else {
+            //inserir no servidor aqui
+            this.setState({ post: {} });
+        }
+    }
+
+    editPost = (post) => {
+        this.setState({
+            post,
+            modalIsOpen: true
+        });
+        console.log(post);
+    }
+
+    removePost = (post) => {
+        console.log(post);
+    }
+
     render () {
-        const { posts, post, modalIsOpen } = this.state;
+        const { posts, post, modalIsOpen, isModalRemove } = this.state;
         return (
             <div>
                 <div className="open-modal-post">
@@ -65,7 +103,9 @@ class Posts extends Component {
                         return (
                             <PostItem 
                                 key={post.id}
-                                post={post} 
+                                post={post}
+                                editPost={this.editPost}
+                                removePost={this.openModalRemove} 
                             />
                         );
                     })}
@@ -73,9 +113,18 @@ class Posts extends Component {
                 <div>
                     <ModalPost 
                         isOpen={modalIsOpen}
-                        closeModal={this.closeModal}
-                        post={post} 
+                        openModal={this.openModal}
+                        post={post}
+                        insertPost={this.insertPost} 
                         handleChange={this.handleChange}
+                    />
+                </div>
+                <div>
+                    <ModalRemove 
+                        isOpen={isModalRemove} 
+                        closeModalRemove={this.closeModalRemove} 
+                        registro={post} 
+                        removerRegistro={this.removePost}
                     />
                 </div>
             </div>

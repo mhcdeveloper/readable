@@ -24,6 +24,13 @@ const ModalComment = ({ isOpen, closeModal, comment, insertComment, handleChange
                                 </div>
                                 <br />
                                 <div className="row">
+                                    <div className="col-md-12">
+                                        <label htmlFor="author">Author</label>
+                                        <input type="text" name="author" className="form-control" id="author" placeholder="Author" value={comment.author} onChange={handleChange.bind(this)} required/>
+                                    </div>
+                                </div>
+                                <br />
+                                <div className="row">
                                     <div>
                                         <button type="button" className="btn btn-info" onClick={closeModal}>Cancelar</button>
                                         <button className="btn btn-primary">Salvar</button>

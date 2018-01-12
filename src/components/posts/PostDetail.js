@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
+import ModalRemove from '../../shared/ModalRemove';
+import ModalPost from './ModalPost';
 
 class PostDetail extends Component {
     constructor(props) {
@@ -19,7 +21,9 @@ class PostDetail extends Component {
                 postId: ''
             },
             postEdit: {},
-            modaIsOpen: false
+            modalIsOpen: false,
+            isModalRemove: false,
+            modalIsOpenComment: false
         }
     }
 
@@ -40,8 +44,29 @@ class PostDetail extends Component {
         .then((comments) => this.setState({ comments }));    
     }
 
+    
+    changeOpenComment = () => {
+        console.log('ok');
+        this.setState({ modalIsOpenComment: !this.state.modalIsOpenComment });
+    }
+    
     changeOpen = () => {
-        this.setState({ modaIsOpen: true });
+        this.setState({ modalIsOpen: !this.state.modalIsOpen });
+    }
+    
+     //Metodo responsavel por abrir o modalRemove
+     openModalRemove = (post) => {
+        this.setState({
+            isModalRemove: !this.state.isModalRemove,
+            post
+        });
+    }
+
+    closeModalRemove = () => {
+        this.setState({
+            modalIsOpen: false,
+            isModalRemove: false
+        });
     }
 
     //Metodo responsavel por atualizar o state de cada input
@@ -54,8 +79,21 @@ class PostDetail extends Component {
         });
     }
 
+    editPost = (post) => {
+        this.setState({
+            post,
+            modalIsOpen: true
+        });
+        console.log(post);
+    }
+
+    removePost = (post) => {
+        console.log(post);
+    }
+
     render () {
-        const { comments, post, modaIsOpen, comment } = this.state;
+        const { editPost, removePost } = this.props;
+        const { comments, post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
         return (
             <div>
                 {post ? 
@@ -63,8 +101,8 @@ class PostDetail extends Component {
                         <div className="card-block">
                             <div className="btn-card-post">
                                 <Link to="/posts" className="btn btn-primary"><i className="glyphicon glyphicon-arrow-left"></i></Link>
-                                <a href="#" className="btn btn-info"><i className="glyphicon glyphicon-edit"></i></a>
-                                <a href="#" className="btn btn-danger"><i className="glyphicon glyphicon-trash"></i></a>
+                                <a href="#" className="btn btn-info" onClick={() => this.editPost(post)}><i className="glyphicon glyphicon-edit"></i></a>
+                                <a href="#" className="btn btn-danger" onClick={() => this.openModalRemove(post)}><i className="glyphicon glyphicon-trash"></i></a>
                             </div>
                             <h3 className="card-title">{post.title}</h3>
                             <p className="card-text">{post.body}</p>
@@ -80,7 +118,7 @@ class PostDetail extends Component {
                                 <Comments key={comment.id} comment={comment} 
                             />)}
                             <div className="btn-new-comment">
-                                <button className="btn btn-primary" onClick={() => this.changeOpen}>New Comment</button>
+                                <button className="btn btn-primary" onClick={this.changeOpenComment}>New Comment</button>
                             </div>
                         </div>
                     </div>
@@ -88,9 +126,27 @@ class PostDetail extends Component {
                 }
                 <div>
                     <ModalComment 
-                        isOpen={modaIsOpen}
+                        isOpen={modalIsOpenComment}
+                        closeModal={this.changeOpenComment}
                         comment={comment}
                         handleChange={this.handleChange}
+                    />
+                </div>
+                <div>
+                    <ModalPost 
+                        isOpen={modalIsOpen}
+                        openModal={this.changeOpen}
+                        post={post}
+                        insertPost={this.editPost} 
+                        handleChange={this.handleChange}
+                    />
+                </div> 
+                <div>
+                    <ModalRemove 
+                        isOpen={isModalRemove} 
+                        closeModalRemove={this.closeModalRemove} 
+                        registro={post} 
+                        removerRegistro={this.removePost}
                     />
                 </div>
             </div>
