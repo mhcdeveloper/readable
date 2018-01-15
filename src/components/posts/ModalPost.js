@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const ModalPost = ({ isOpen, openModal, post, insertPost, handleChange }) => {
+const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange }) => {
     return (
         <div>
             <Modal
@@ -39,7 +39,7 @@ const ModalPost = ({ isOpen, openModal, post, insertPost, handleChange }) => {
                                 <br />
                                 <div className="row">
                                     <div>
-                                        <button type="button" className="btn btn-info" onClick={openModal}>Cancelar</button>
+                                        <button type="button" className="btn btn-info" onClick={closeModal}>Cancelar</button>
                                         <button className="btn btn-primary">Salvar</button>
                                     </div>
                                 </div>

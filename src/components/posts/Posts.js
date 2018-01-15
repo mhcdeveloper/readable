@@ -39,9 +39,26 @@ class Posts extends Component {
 
     openModal = () => {
         this.setState({
-            modalIsOpen: !this.state.modalIsOpen
+            modalIsOpen: true
         });
     }    
+
+    closeModal = () => {
+        this.setState({
+            modalIsOpen: false,
+            post: {
+                author: '',
+                body: '',
+                category: '',
+                commentCount: '',
+                deleted: false,
+                id: '',
+                timestamp: '',
+                title: '',
+                voteScore: '',
+            }
+        });
+    }
 
     //Metodo responsavel por abrir o modalRemove
     openModalRemove = (post) => {
@@ -113,7 +130,7 @@ class Posts extends Component {
                 <div>
                     <ModalPost 
                         isOpen={modalIsOpen}
-                        openModal={this.openModal}
+                        closeModal={this.closeModal}
                         post={post}
                         insertPost={this.insertPost} 
                         handleChange={this.handleChange}

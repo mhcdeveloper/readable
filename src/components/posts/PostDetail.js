@@ -46,8 +46,15 @@ class PostDetail extends Component {
 
     
     changeOpenComment = () => {
-        console.log('ok');
-        this.setState({ modalIsOpenComment: !this.state.modalIsOpenComment });
+        this.setState({ 
+            modalIsOpenComment: !this.state.modalIsOpenComment,
+            comment: {
+                id: '',
+                body: '',
+                author: '',
+                postId: ''
+            } 
+        });
     }
     
     changeOpen = () => {
@@ -91,6 +98,18 @@ class PostDetail extends Component {
         console.log(post);
     }
 
+    editComment = (comment) => {
+        this.setState({
+            comment,
+            modalIsOpenComment: true
+        });
+        console.log(comment);
+    }
+
+    removeComment = (comment) => {
+        console.log(comment);
+    }
+
     render () {
         const { editPost, removePost } = this.props;
         const { comments, post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
@@ -115,8 +134,11 @@ class PostDetail extends Component {
                             <a href="#" className="btn btn-primary"><i className="glyphicon glyphicon-thumbs-down"></i></a>
                             
                             {comments.map(comment => 
-                                <Comments key={comment.id} comment={comment} 
-                            />)}
+                                <Comments 
+                                    key={comment.id} 
+                                    comment={comment}
+                                    editComment={this.editComment} 
+                                />)}
                             <div className="btn-new-comment">
                                 <button className="btn btn-primary" onClick={this.changeOpenComment}>New Comment</button>
                             </div>
@@ -135,7 +157,7 @@ class PostDetail extends Component {
                 <div>
                     <ModalPost 
                         isOpen={modalIsOpen}
-                        openModal={this.changeOpen}
+                        closeModal={this.changeOpen}
                         post={post}
                         insertPost={this.editPost} 
                         handleChange={this.handleChange}
