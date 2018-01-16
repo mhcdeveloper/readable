@@ -62,7 +62,7 @@ class PostDetail extends Component {
     }
     
      //Metodo responsavel por abrir o modalRemove
-     openModalRemove = (post) => {
+     openModalRemove = (post, comment) => {
         this.setState({
             isModalRemove: !this.state.isModalRemove,
             post
@@ -110,6 +110,14 @@ class PostDetail extends Component {
         console.log(comment);
     }
 
+    upVote = () => {
+        console.log('up')
+    }
+    
+    downVote = () => {
+        console.log('down')
+    }    
+
     render () {
         const { editPost, removePost } = this.props;
         const { comments, post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
@@ -130,14 +138,15 @@ class PostDetail extends Component {
                                 <small className="text-muted">{post.commentCount} <i className="glyphicon glyphicon-comment"></i> </small>
                                 <small className="text-muted">{post.voteScore} <i className="glyphicon glyphicon-thumbs-up"></i></small>
                             </p>
-                            <a href="#" className="btn btn-primary"><i className="glyphicon glyphicon-thumbs-up"></i></a>
-                            <a href="#" className="btn btn-primary"><i className="glyphicon glyphicon-thumbs-down"></i></a>
+                            <a href="#" className="btn btn-primary" onClick={() => this.upVote()}><i className="glyphicon glyphicon-thumbs-up"></i></a>
+                            <a href="#" className="btn btn-primary" onClick={() => this.downVote()}><i className="glyphicon glyphicon-thumbs-down"></i></a>
                             
                             {comments.map(comment => 
                                 <Comments 
                                     key={comment.id} 
                                     comment={comment}
-                                    editComment={this.editComment} 
+                                    editComment={this.editComment}
+                                    removeComment={this.removeComment} 
                                 />)}
                             <div className="btn-new-comment">
                                 <button className="btn btn-primary" onClick={this.changeOpenComment}>New Comment</button>
