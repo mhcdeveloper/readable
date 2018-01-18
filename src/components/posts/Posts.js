@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import * as ReadableAPI  from '../../shared/utils/ReadableAPI';
 import Modal from 'react-modal';
 import serializeForm from 'form-serialize';
+import { connect } from 'react-redux';
 
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
 import ModalRemove from '../../shared/ModalRemove';
+import { createPost, getAll } from '../../actions/PostsAction';
 
 class Posts extends Component {
     constructor(props) {
@@ -15,13 +17,8 @@ class Posts extends Component {
             post: {
                 author: '',
                 body: '',
-                category: '',
-                commentCount: '',
-                deleted: false,
                 id: '',
-                timestamp: '',
                 title: '',
-                voteScore: '',
             },
             posts: [],
             modalIsOpen: false,
@@ -32,9 +29,7 @@ class Posts extends Component {
     componentDidMount() {
         Modal.setAppElement('body');
         ReadableAPI.getAll()
-            .then((posts) => this.setState({ posts }));
-
-        console.log(this.state.posts);
+        .then( res => this.props.getAll(res)); 
     }
 
     openModal = () => {
@@ -49,13 +44,8 @@ class Posts extends Component {
             post: {
                 author: '',
                 body: '',
-                category: '',
-                commentCount: '',
-                deleted: false,
                 id: '',
-                timestamp: '',
                 title: '',
-                voteScore: '',
             }
         });
     }
@@ -92,6 +82,7 @@ class Posts extends Component {
             this.editPost(values);
         } else {
             //inserir no servidor aqui
+            this.props.createPost(values);
             this.setState({ post: {} });
         }
     }
@@ -109,7 +100,8 @@ class Posts extends Component {
     }
 
     render () {
-        const { posts, post, modalIsOpen, isModalRemove } = this.state;
+        const { post, modalIsOpen, isModalRemove } = this.state;
+        const { posts } = this.props;
         return (
             <div>
                 <div className="open-modal-post">
@@ -149,4 +141,13 @@ class Posts extends Component {
     }
 }
 
-export default Posts;
+const mapStateToProps = ( state ) => ({
+    posts: state.posts
+})
+
+const mapDispatchToProps = dispatch => ({
+    createPost: (post) => dispatch(createPost(post)),
+    getAll: (posts) => dispatch(getAll(posts))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);
