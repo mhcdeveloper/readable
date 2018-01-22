@@ -6,9 +6,7 @@ import {
 
 import * as ReadableAPI from '../shared/utils/ReadableAPI';
 
-
-
-export function getAll (posts) {    
+export const getAll = (posts) => {  
     return {
         type: 'GET_ALL_POST',
         payload: posts
@@ -16,6 +14,7 @@ export function getAll (posts) {
 }
 
 export function createPost (post) {
+    console.log(post);
     return {
         type: 'CREATE_POST',
         payload: post

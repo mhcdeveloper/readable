@@ -5,28 +5,28 @@ import {
 } from '../actions/';
 
 const initialPostsState = {
-    posts: []
+    posts: [],
+    open: false
 }
 
 function postReducer  (state = initialPostsState, action) {
     const { payload } = action;
     switch (action.type) {
-        
         case 'GET_ALL_POST':
             return {
-                ...state.posts,
-                payload
+                ...state,
+                posts: payload,
+                open: true
             }
         case 'CREATE_POST':
             return {
                 ...state,
                 payload
             }
-
+        
         default :
             return state;
     }
-    
 }
 
 export default postReducer;

@@ -29,7 +29,7 @@ class Posts extends Component {
     componentDidMount() {
         Modal.setAppElement('body');
         ReadableAPI.getAll()
-        .then( res => this.props.getAll(res)); 
+            .then( res => this.props.getAll(res));
     }
 
     openModal = () => {
@@ -82,7 +82,10 @@ class Posts extends Component {
             this.editPost(values);
         } else {
             //inserir no servidor aqui
-            this.props.createPost(values);
+            ReadableAPI.createPost(values)
+       //         .then(res => console.log(res))
+         //       .catch(err => console.log(err));
+//            this.props.createPost(values);
             this.setState({ post: {} });
         }
     }
@@ -92,11 +95,13 @@ class Posts extends Component {
             post,
             modalIsOpen: true
         });
-        console.log(post);
+
+        ReadableAPI.updatePost(this.state.post)
+            .then((res) => console.log(res));
     }
 
     removePost = (post) => {
-        console.log(post);
+    //    console.log(post);
     }
 
     render () {
@@ -104,6 +109,7 @@ class Posts extends Component {
         const { posts } = this.props;
         return (
             <div>
+                {console.log(this.props.posts)}
                 <div className="open-modal-post">
                     <button onClick={this.openModal}>+</button>
                 </div>
@@ -142,7 +148,8 @@ class Posts extends Component {
 }
 
 const mapStateToProps = ( state ) => ({
-    posts: state.posts
+    posts: state.posts,
+    open: state.open
 })
 
 const mapDispatchToProps = dispatch => ({
