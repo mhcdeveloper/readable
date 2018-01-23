@@ -3,7 +3,9 @@ import Comments from './comments/Comments';
 import ModalComment from './comments/ModalComment';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
+import { connect } from 'react-redux';
 
+import { getAllComments } from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
 import ModalRemove from '../../shared/ModalRemove';
 import ModalPost from './ModalPost';
@@ -35,13 +37,18 @@ class PostDetail extends Component {
     buscarDetail = () => {
         const id = this.props.match.params.id;
         ReadableAPI.getDetail(id)
-            .then((post) => this.setState({ post }), this.buscarComentario());
+            .then((post) => {
+                return (
+                    this.setState({ post }), 
+                    this.buscarComentario()
+                )
+            });
     }
 
     buscarComentario = () => {
         const id = this.props.match.params.id;
         ReadableAPI.getCommentPost(id)
-        .then((comments) => this.setState({ comments }));    
+        .then((comments) => this.props.getAllComments(comments));    
     }
 
     
@@ -119,8 +126,8 @@ class PostDetail extends Component {
     }    
 
     render () {
-        const { editPost, removePost } = this.props;
-        const { comments, post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
+        const { editPost, removePost, comments } = this.props;
+        const { post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
         return (
             <div>
                 {post ? 
@@ -184,5 +191,12 @@ class PostDetail extends Component {
         );
     }
 }
+const mapStateToProps = ({ commentReducer }) => ({
+    comments: commentReducer.comments,
+})
 
-export default PostDetail;
+const mapDispatchToProps = dispatch => ({
+    getAllComments: (comments) => dispatch(getAllComments(comments))
+})
+
+export default connect (mapStateToProps, mapDispatchToProps)(PostDetail);

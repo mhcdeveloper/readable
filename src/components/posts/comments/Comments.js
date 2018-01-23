@@ -1,7 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const upVote = () => {
+import * as ReadableAPI from '../../../shared/utils/ReadableAPI';
+import { voteScoreComment } from '../../../actions/CommentsAction';
+
+const upVote = (comment) => {
     console.log('up')
+    let option = 'upVote';
+    ReadableAPI.voteScoreComment(comment.id, option)
+        .then(res => null)
+        .catch(err => console.log(err));
 }
 
 
@@ -16,8 +24,8 @@ const Comments = ({ comment, editComment, removeComment }) => {
                 <p className="card-text">{comment.body}</p>
                 <p className="card-text">{comment.author}</p>
                 <p className="card-text">
-                    <small className="text-muted" onClick={() => upVote()}>{comment.voteScore} <i className="glyphicon glyphicon-thumbs-up"></i></small>
-                    <small className="text-muted" onClick={() => downVote()}><i className="glyphicon glyphicon-thumbs-down"></i></small>
+                    <small className="text-muted" onClick={() => upVote(comment)}>{comment.voteScore} <i className="glyphicon glyphicon-thumbs-up"></i></small>
+                    <small className="text-muted" onClick={() => downVote(comment)}><i className="glyphicon glyphicon-thumbs-down"></i></small>
                 </p>
             </div>
             <div className="card-block">
@@ -28,4 +36,8 @@ const Comments = ({ comment, editComment, removeComment }) => {
     );
 }
 
-export default Comments;
+const mapDispatchToProps = dispatch => ({
+    voteScoreComment: (comment) => dispatch(voteScoreComment(comment))
+})
+
+export default connect(null, mapDispatchToProps)(Comments);

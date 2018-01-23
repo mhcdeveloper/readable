@@ -28,8 +28,8 @@ class Posts extends Component {
 
     componentDidMount() {
         Modal.setAppElement('body');
-        ReadableAPI.getAll()
-            .then( res => this.props.getAll(res));
+        ReadableAPI.getAllPosts()
+           .then(res => this.props.getAll(res));
     }
 
     openModal = () => {
@@ -147,9 +147,9 @@ class Posts extends Component {
     }
 }
 
-const mapStateToProps = ( state ) => ({
-    posts: state.posts,
-    open: state.open
+const mapStateToProps = ({ postReducer }) => ({
+    posts: postReducer.posts,
+    open: postReducer.open
 })
 
 const mapDispatchToProps = dispatch => ({

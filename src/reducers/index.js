@@ -1,27 +1,25 @@
+import { combineReducers } from 'redux';
 import {
     CREATE_POST,
     UPDATE_POST,
-    DELETE_POST
+    DELETE_POST,
+    GET_ALL_COMMENTS
 } from '../actions/';
 
 const initialPostsState = {
     posts: [],
-    open: false
 }
 
 function postReducer  (state = initialPostsState, action) {
-    const { payload } = action;
     switch (action.type) {
         case 'GET_ALL_POST':
             return {
                 ...state,
-                posts: payload,
-                open: true
+                posts: action.payload
             }
         case 'CREATE_POST':
             return {
-                ...state,
-                payload
+                ...state
             }
         
         default :
@@ -29,4 +27,20 @@ function postReducer  (state = initialPostsState, action) {
     }
 }
 
-export default postReducer;
+const initialCommentState = {
+    comments: []
+}
+
+function commentReducer (state = initialCommentState, action) {
+    switch (action.type) {
+        case 'GET_ALL_COMMENTS' :
+            return {
+                ...state,
+                comments: action.payload
+            }
+        default :
+            return state;
+    }
+}
+
+export default combineReducers({ postReducer, commentReducer });

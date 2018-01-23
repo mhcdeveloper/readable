@@ -4,8 +4,6 @@ import {
     DELETE_POST
 } from './index';
 
-import * as ReadableAPI from '../shared/utils/ReadableAPI';
-
 export const getAll = (posts) => {  
     return {
         type: 'GET_ALL_POST',
