@@ -26,7 +26,7 @@ class Posts extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         Modal.setAppElement('body');
         ReadableAPI.getAllPosts()
            .then(res => this.props.getAll(res));
@@ -83,10 +83,10 @@ class Posts extends Component {
         } else {
             //inserir no servidor aqui
             ReadableAPI.createPost(values)
-       //         .then(res => console.log(res))
-         //       .catch(err => console.log(err));
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
 //            this.props.createPost(values);
-            this.setState({ post: {} });
+  //          this.setState({ post: {} });
         }
     }
 

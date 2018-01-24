@@ -18,8 +18,8 @@ const ModalCategory = ({ isOpen, closeModal, category, insertCategory, handleCha
                             <form onSubmit={insertCategory}>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <label htmlFor="descricao">Descrição</label>
-                                        <input type="text" name="descricao" className="form-control" id="descricao" placeholder="Descrição" value={category.descricao} onChange={handleChange.bind(this)} required/>
+                                        <label htmlFor="name">Name</label>
+                                        <input type="text" name="name" className="form-control" id="name" placeholder="Name" value={category.name} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />

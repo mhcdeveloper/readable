@@ -1,11 +1,13 @@
-import react from 'react';
+import React from 'react';
 
-const CategoriaItem = ({ categoria }) => {
+const CategoryItem = ({ category }) => {
     return (
         <div>
-            <span>{categoria.descricao}</span>
+            <span>{category.name}</span>
             <button className="btn btn-info">Editar</button>
             <button className="btn btn-info">Remover</button>
         </div>
     );
 }
+
+export default CategoryItem;

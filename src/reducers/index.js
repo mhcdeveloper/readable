@@ -43,4 +43,21 @@ function commentReducer (state = initialCommentState, action) {
     }
 }
 
-export default combineReducers({ postReducer, commentReducer });
+const initialCategoryState = {
+    categories: []
+}
+
+function categoryReducer (state = initialCategoryState, action) {
+    console.log(action.payload);
+    switch(action.type) {
+        case 'GET_ALL_CATEGORIES' :
+            return {
+                ...state,
+                categories: action.payload
+            }
+        default :
+            return state;
+    }
+}
+
+export default combineReducers({ postReducer, commentReducer, categoryReducer });

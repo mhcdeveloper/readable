@@ -38,16 +38,14 @@ export const getDetail = (id) => {
 export const createPost = (post) => {
   return (
     fetch(`${url}/posts/`,{ method: 'POST',  headers },{
-      body: JSON.stringify({
-        author: post.author, 
-        category: 'redux',
-        commentCount: 0,
-        deleted: false,
-        body: post.body,
+      body: {
+        id: 2,
         timestamp: Date.now(),
         title: post.title,
-        voteScore: 0
-      })
+        body: post.body,
+        author: post.author, 
+        category: 'redux',
+      }
     })
       .then(res => console.log(res))
       .catch(err => console.log(err))
@@ -102,6 +100,23 @@ export const voteScoreComment = ({ id, option }) => {
 
 
 
+/*
+  Inicio dos Metodos relacionados as categories
+*/
+
+//GetAll busca todos os posts
+export const getAllCategories = () => {
+  return (
+    fetch(`${url}/categories`, { headers })
+      .then(res => res.json())
+      .catch(err => console.log(err))  
+  )
+}
+
+
+/*
+  Fim dos Metodos relacionados as categories
+*/
 
 
 
