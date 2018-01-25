@@ -1,3 +1,4 @@
+import * as ReadableAPI from '../shared/utils/ReadableAPI';
 import {
     CREATE_POST,
     UPDATE_POST,
@@ -17,4 +18,10 @@ export function createPost (post) {
         type: 'CREATE_POST',
         payload: post
     }
+}
+
+export function votePost (id, option) {
+    ReadableAPI.voteScorePost(id, option)
+        .then(res => null)
+        .catch(err => console.log(err));
 }

@@ -4,6 +4,7 @@ import ModalComment from './comments/ModalComment';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
+import serializeForm from 'form-serialize';
 
 import { getAllComments } from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
@@ -82,7 +83,7 @@ class PostDetail extends Component {
             isModalRemove: false
         });
     }
-
+    
     //Metodo responsavel por atualizar o state de cada input
     handleChange = (e) => {
         e.preventDefault();
@@ -92,7 +93,9 @@ class PostDetail extends Component {
             }
         });
     }
-
+    
+    
+    //Metodo responsavel por editar um post
     editPost = (post) => {
         this.setState({
             post,
@@ -101,10 +104,40 @@ class PostDetail extends Component {
         console.log(post);
     }
 
+    //Metodo responsavel por remover o post
     removePost = (post) => {
         console.log(post);
     }
+    
+    //Metodo responsavel por up vote no post
+    upVote = () => {
+        console.log('up')
+    }
+    
+    //Metodo responsavel por down vote no post
+    downVote = () => {
+        console.log('down')
+    }    
 
+    //Metodo responsavel por adicionar um novo comentario
+    insertComment = (e) => {
+        e.preventDefault();
+        const { comment, post } = this.state;
+        let parentId = post.id;
+        const values = serializeForm(e.target, { hash: true });
+        if (comment.id) {
+            this.editComment(values);
+        } else {
+            //inserir no servidor aqui
+            ReadableAPI.createComment(values, parentId)
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
+//            this.props.createPost(values);
+  //          this.setState({ post: {} });
+        }
+    }
+    
+    //Metodo responsavel por editar um post
     editComment = (comment) => {
         this.setState({
             comment,
@@ -112,19 +145,13 @@ class PostDetail extends Component {
         });
         console.log(comment);
     }
-
+    
+    //Metodo responsavel por remover o comment
     removeComment = (comment) => {
         console.log(comment);
     }
-
-    upVote = () => {
-        console.log('up')
-    }
     
-    downVote = () => {
-        console.log('down')
-    }    
-
+    
     render () {
         const { editPost, removePost, comments } = this.props;
         const { post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
@@ -167,6 +194,7 @@ class PostDetail extends Component {
                         isOpen={modalIsOpenComment}
                         closeModal={this.changeOpenComment}
                         comment={comment}
+                        insertComment={this.insertComment}
                         handleChange={this.handleChange}
                     />
                 </div>

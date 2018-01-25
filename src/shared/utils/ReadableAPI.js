@@ -37,20 +37,31 @@ export const getDetail = (id) => {
 //Metodo responsável por adicionar um novo post
 export const createPost = (post) => {
   return (
-    fetch(`${url}/posts/`,{ method: 'POST',  headers },{
-      body: {
+    fetch(`${url}/posts/`,{ method: 'POST',  headers: { ...headers, 'Content-Type': 'application/json'},
+      body: JSON.stringify({
         id: 2,
         timestamp: Date.now(),
         title: post.title,
         body: post.body,
         author: post.author, 
         category: 'redux',
-      }
+      })
     })
       .then(res => console.log(res))
       .catch(err => console.log(err))
   )
 }  
+
+
+//Metodo responsável por fazer o voteScore
+export const voteScorePost = (id, option) => {
+  return (
+    fetch(`${url}/posts/${id}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'}, 
+      body: JSON.stringify({ option: option > 0 ? 'upVote' : 'downVote' })  
+    }).then(res => res.json())
+    .catch(err => console.log(err))
+  )
+}
   
 /*
   Fim dos Metodos relacionados ao posts
@@ -83,12 +94,30 @@ export const getCommentPost = (id) =>  {
   )
 }
 
-//Metodo responsável por fazer o voteScore
-export const voteScoreComment = ({ id, option }) => {
+//Metodo responsável por adicionar um novo comentario
+export const createComment = (comment, parentId) => {
   return (
-    fetch(`${url}/comments/${id}`, { method: 'POST', headers }, {
-      body: { option: option }  
-    }).then(res => console.log(res))
+    fetch(`${url}/comments/`,{ method: 'POST',  headers: { ...headers, 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: 2,
+        timestamp: Date.now(),
+        body: comment.body,
+        author: comment.author, 
+        parentId: parentId
+      })
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  )
+}  
+
+
+//Metodo responsável por fazer o voteScore
+export const voteScoreComment = (id, option) => {
+  return (
+    fetch(`${url}/comments/${id}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'}, 
+      body: JSON.stringify({ option: option > 0 ? 'upVote' : 'downVote' })  
+    }).then(res => res.json())
     .catch(err => console.log(err))
   )
 }
