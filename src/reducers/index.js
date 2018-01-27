@@ -38,6 +38,10 @@ function commentReducer (state = initialCommentState, action) {
                 ...state,
                 comments: action.payload
             }
+        case 'CREATE_COMMENT' :
+            return {
+                ...state
+            }
         default :
             return state;
     }

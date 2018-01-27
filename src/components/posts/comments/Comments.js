@@ -2,18 +2,50 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as ReadableAPI from '../../../shared/utils/ReadableAPI';
-import { voteScoreComment } from '../../../actions/CommentsAction';
+import { voteScoreComment, removeComment } from '../../../actions/CommentsAction';
+import ModalRemove from '../../../shared/ModalRemove';
 
 class Comments extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            comment: {},
+            isModalRemove: false
+        }
     }
 
+    //Metodo responsavel por abrir o modalRemove
+    openModalRemove = (comment) => {
+        this.setState({
+            isModalRemove: !this.state.isModalRemove,
+            comment
+        });
+    }
+
+    //Responsavel por fechar o modalRemove
+    closeModalRemove = () => {
+        this.setState({
+            modalIsOpen: false,
+            isModalRemove: false
+        });
+    }
+
+    //Responsavel pelo vote score do comment
     voteComment = (comment, option) => {
-        this.props.voteScoreComment(comment.id, option);
+        const vote = {
+            comment,
+            option
+        }
+        this.props.voteScoreComment(vote);
+    }
+
+    //Responsavel por remover o comment
+    removeComment = (comment) => {
+        this.props.removeComment(comment.id);
     }
 
     render () {
+        const { isModalRemove } = this.state;
         const { comment, editComment, removeComment } = this.props;
         return (
             <div className="card">
@@ -27,7 +59,15 @@ class Comments extends Component {
                 </div>
                 <div className="card-block">
                     <a href="#" className="card-link" onClick={() => editComment(comment)}><i className="glyphicon glyphicon-edit"></i></a>
-                    <a href="#" className="card-link" onClick={() => removeComment(comment)}><i className="glyphicon glyphicon-trash"></i></a>
+                    <a href="#" className="card-link" onClick={() => this.openModalRemove(comment)}><i className="glyphicon glyphicon-trash"></i></a>
+                </div>
+                <div>
+                    <ModalRemove 
+                        isOpen={isModalRemove} 
+                        closeModalRemove={this.closeModalRemove} 
+                        registro={comment} 
+                        removerRegistro={this.removeComment}
+                    />
                 </div>
             </div>
         )
@@ -35,7 +75,8 @@ class Comments extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    voteScoreComment: (id, option) => dispatch(voteScoreComment(id, option))
+    voteScoreComment: (vote) => dispatch(voteScoreComment(vote)),
+    removeComment: (id) => dispatch(removeComment(id))
 })
 
 export default connect(null, mapDispatchToProps)(Comments);

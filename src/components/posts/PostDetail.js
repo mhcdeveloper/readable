@@ -6,7 +6,8 @@ import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
 
-import { getAllComments } from '../../actions/CommentsAction';
+import { voteScorePost } from '../../actions/PostsAction'; 
+import { fetchComments, createComment } from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
 import ModalRemove from '../../shared/ModalRemove';
 import ModalPost from './ModalPost';
@@ -48,8 +49,7 @@ class PostDetail extends Component {
 
     buscarComentario = () => {
         const id = this.props.match.params.id;
-        ReadableAPI.getCommentPost(id)
-        .then((comments) => this.props.getAllComments(comments));    
+        this.props.fetchComments(id);    
     }
 
     
@@ -69,8 +69,8 @@ class PostDetail extends Component {
         this.setState({ modalIsOpen: !this.state.modalIsOpen });
     }
     
-     //Metodo responsavel por abrir o modalRemove
-     openModalRemove = (post, comment) => {
+    //Metodo responsavel por abrir o modalRemove
+    openModalRemove = (post, comment) => {
         this.setState({
             isModalRemove: !this.state.isModalRemove,
             post
@@ -109,15 +109,14 @@ class PostDetail extends Component {
         console.log(post);
     }
     
-    //Metodo responsavel por up vote no post
-    upVote = () => {
-        console.log('up')
+    //Metodo responsavel por vote score do post
+    votePost = (post, option) => {
+        const vote = {
+            post,
+            option
+        }
+        this.props.voteScorePost(vote);
     }
-    
-    //Metodo responsavel por down vote no post
-    downVote = () => {
-        console.log('down')
-    }    
 
     //Metodo responsavel por adicionar um novo comentario
     insertComment = (e) => {
@@ -129,9 +128,7 @@ class PostDetail extends Component {
             this.editComment(values);
         } else {
             //inserir no servidor aqui
-            ReadableAPI.createComment(values, parentId)
-                .then(res => console.log(res))
-                .catch(err => console.log(err));
+            this.props.createComment(values, parentId);
 //            this.props.createPost(values);
   //          this.setState({ post: {} });
         }
@@ -172,8 +169,8 @@ class PostDetail extends Component {
                                 <small className="text-muted">{post.commentCount} <i className="glyphicon glyphicon-comment"></i> </small>
                                 <small className="text-muted">{post.voteScore} <i className="glyphicon glyphicon-thumbs-up"></i></small>
                             </p>
-                            <a href="#" className="btn btn-primary" onClick={() => this.upVote()}><i className="glyphicon glyphicon-thumbs-up"></i></a>
-                            <a href="#" className="btn btn-primary" onClick={() => this.downVote()}><i className="glyphicon glyphicon-thumbs-down"></i></a>
+                            <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 1)}><i className="glyphicon glyphicon-thumbs-up"></i></a>
+                            <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 0)}><i className="glyphicon glyphicon-thumbs-down"></i></a>
                             
                             {comments.map(comment => 
                                 <Comments 
@@ -224,7 +221,9 @@ const mapStateToProps = ({ commentReducer }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    getAllComments: (comments) => dispatch(getAllComments(comments))
+    fetchComments: (id) => dispatch(fetchComments(id)),
+    createComment: (comment, parentId) => dispatch(createComment(comment, parentId)),
+    voteScorePost: (vote) => dispatch(voteScorePost(vote))
 })
 
 export default connect (mapStateToProps, mapDispatchToProps)(PostDetail);

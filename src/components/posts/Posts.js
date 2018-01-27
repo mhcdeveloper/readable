@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
 import ModalRemove from '../../shared/ModalRemove';
-import { createPost, getAll } from '../../actions/PostsAction';
+import { createPost, fetchPosts, removePost } from '../../actions/PostsAction';
 
 class Posts extends Component {
     constructor(props) {
@@ -28,8 +28,7 @@ class Posts extends Component {
 
     componentWillMount() {
         Modal.setAppElement('body');
-        ReadableAPI.getAllPosts()
-           .then(res => this.props.getAll(res));
+        this.props.fetchPosts();
     }
 
     openModal = () => {
@@ -58,6 +57,7 @@ class Posts extends Component {
         });
     }
 
+    //Responsavel por fechar o modalRemove
     closeModalRemove = () => {
         this.setState({
             modalIsOpen: false,
@@ -65,6 +65,7 @@ class Posts extends Component {
         });
     }
 
+    //Responsavel por atualizar os input
     handleChange = (e) => {
         e.preventDefault();
         this.setState({
@@ -74,6 +75,7 @@ class Posts extends Component {
         })
     }
 
+    //Responsavel por inserir um post
     insertPost = (e) => {
         e.preventDefault();
         const values = serializeForm(e.target, { hash: true });
@@ -90,6 +92,7 @@ class Posts extends Component {
         }
     }
 
+    //Responsavel por editar o post
     editPost = (post) => {
         this.setState({
             post,
@@ -100,8 +103,10 @@ class Posts extends Component {
             .then((res) => console.log(res));
     }
 
+    //Responsavel por remover o post
     removePost = (post) => {
     //    console.log(post);
+        this.props.removePost(post.id);
     }
 
     render () {
@@ -109,7 +114,6 @@ class Posts extends Component {
         const { posts } = this.props;
         return (
             <div>
-                {console.log(this.props.posts)}
                 <div className="open-modal-post">
                     <button onClick={this.openModal}>+</button>
                 </div>
@@ -154,7 +158,8 @@ const mapStateToProps = ({ postReducer }) => ({
 
 const mapDispatchToProps = dispatch => ({
     createPost: (post) => dispatch(createPost(post)),
-    getAll: (posts) => dispatch(getAll(posts))
+    fetchPosts: () => dispatch(fetchPosts()),
+    removePost: (id) => dispatch(removePost(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

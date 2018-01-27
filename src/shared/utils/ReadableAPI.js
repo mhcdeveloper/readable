@@ -54,15 +54,24 @@ export const createPost = (post) => {
 
 
 //Metodo responsável por fazer o voteScore
-export const voteScorePost = (id, option) => {
+export const voteScorePost = (vote) => {
   return (
-    fetch(`${url}/posts/${id}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'}, 
-      body: JSON.stringify({ option: option > 0 ? 'upVote' : 'downVote' })  
+    fetch(`${url}/posts/${vote.post.id}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'}, 
+      body: JSON.stringify({ option: vote.option > 0 ? 'upVote' : 'downVote' })  
     }).then(res => res.json())
     .catch(err => console.log(err))
   )
 }
-  
+
+//Metodo responsavel por remover o post
+export const removePost = (id) => {
+  return (
+    fetch(`${url}/posts/${id}`, { method: 'DELETE', headers: { ...headers, 'Content-type': 'application/json' } })
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  )
+}
+
 /*
   Fim dos Metodos relacionados ao posts
 */
@@ -113,12 +122,22 @@ export const createComment = (comment, parentId) => {
 
 
 //Metodo responsável por fazer o voteScore
-export const voteScoreComment = (id, option) => {
+export const voteScoreComment = (vote) => {
   return (
-    fetch(`${url}/comments/${id}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'}, 
-      body: JSON.stringify({ option: option > 0 ? 'upVote' : 'downVote' })  
+    fetch(`${url}/comments/${vote.comment.id}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'}, 
+      body: JSON.stringify({ option: vote.option > 0 ? 'upVote' : 'downVote' })  
     }).then(res => res.json())
     .catch(err => console.log(err))
+  )
+}
+
+
+//Metodo responsavel por remover o comment
+export const removeComment = (id) => {
+  return (
+    fetch(`${url}/comments/${id}`, { method: 'DELETE', headers: { ...headers, 'Content-type': 'application/json' } })
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
   )
 }
 
