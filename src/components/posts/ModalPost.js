@@ -18,6 +18,11 @@ const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange }) => {
                             <form onSubmit={insertPost}>
                                 <div className="row">
                                     <div className="col-md-12">
+                                        <input type="hidden" name="id" value={post.id} />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-12">
                                         <label htmlFor="title">Title</label>
                                         <input type="text" name="title" className="form-control" id="title" placeholder="Title" value={post.title} onChange={handleChange.bind(this)} required/>
                                     </div>

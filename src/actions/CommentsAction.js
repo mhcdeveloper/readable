@@ -43,6 +43,14 @@ export const createComment = (comment, parentId) => dispatch => {
                 .catch(err => console.log(err));
 }
 
+//Metodo responsavel por remover o comment do redux
+export const removeCommentRedux = (comment) => {
+    return {
+        type: 'REMOVE_COMMENT',
+        comment
+    }
+}
+
 //Responsavel por remover o comment
 export const removeComment = (id) => dispatch => {
     ReadableAPI.removeComment(id)

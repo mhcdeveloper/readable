@@ -93,6 +93,7 @@ class PostDetail extends Component {
         e.preventDefault();
         this.setState({
             comment: {
+                ...this.state.comment,
                 [e.target.name]: e.target.value
             }
         });
@@ -108,8 +109,8 @@ class PostDetail extends Component {
     }
 
     //Metodo responsavel por remover o post
-    removePost = (post) => {
-        this.props.removePost(post.id);
+    removePost = (post, index) => {
+        this.props.removePost(post.id, index);
     }
     
     //Metodo responsavel por vote score do post
@@ -180,12 +181,12 @@ class PostDetail extends Component {
                             <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 1)}><i className="glyphicon glyphicon-thumbs-up"></i></a>
                             <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 0)}><i className="glyphicon glyphicon-thumbs-down"></i></a>
                             
-                            {comments.map(comment => 
+                            {comments.filter(comment => comment.deleted === false).map(comment => 
                                 <Comments 
                                     key={comment.id} 
                                     comment={comment}
                                     editComment={this.editComment}
-                                    removeComment={this.removeComment} 
+                                    removeComment={this.removeComment}
                                 />)}
                             <div className="btn-new-comment">
                                 <button className="btn btn-primary" onClick={this.changeOpenComment}>New Comment</button>

@@ -19,18 +19,20 @@ export const fetchPosts = () => dispatch => {
            .then(res => dispatch(getAll(res)));
 }
 
+//Responsavel por setar o novo post no redux
+export const createPostRedux = (post) => {
+    return {
+        type: 'CREATE_POST',
+        post
+    }
+}
+
 //Responsavel por criar o post
 export const createPost = (post) => dispatch => {
     ReadableAPI.createPost(post)
-        .then(res => {
-            return {
-                type: 'CREATE_POST',
-                payload: post
-            }            
-        })
+        .then(res => dispatch(createPostRedux(res)))
         .catch(err => console.log(err));
 }
-
 
 //Responsavel por fazer o vote score do post
 export const voteScorePost = (vote) => dispatch => {
@@ -44,6 +46,7 @@ export const voteScorePost = (vote) => dispatch => {
         .catch(err => console.log(err));
 }
 
+//Responsavel por setar o post no redux
 export const removePostRedux = () => {
     return  {
         type: 'REMOVE_POST',
@@ -58,6 +61,7 @@ export const removePost = (id) => dispatch => {
         .catch(err => console.log(err));
 }
 
+//Responsavel por atualizar o post
 export const updatePost = (post) => dispatch => {
     ReadableAPI.updatePost(post)
         .then(res => {

@@ -12,15 +12,17 @@ const initialPostsState = {
 }
 
 function postReducer  (state = initialPostsState, action) {
+    const { post, payload } = action;
     switch (action.type) {
         case 'GET_ALL_POST':
             return {
                 ...state,
-                posts: action.payload
+                posts: payload
             }
         case 'CREATE_POST':
             return {
-                ...state
+                ...state,
+                posts: state.posts.concat(post)
             }
         case 'REMOVE_POST':
             return {
@@ -38,6 +40,7 @@ const initialCommentState = {
 
 function commentReducer (state = initialCommentState, action) {
     const { comment } = action;
+    console.log(comment);
     switch (action.type) {
         case 'GET_ALL_COMMENTS' :
             return {
@@ -47,6 +50,17 @@ function commentReducer (state = initialCommentState, action) {
         case 'CREATE_COMMENT' :
             return {
                 ...state,
+                comments: state.comments.concat(comment)
+            }
+        case 'REMOVE_COMMENT' :
+            return {
+                ...state,
+                comments: {
+                    ...state.comments,
+                    [comment]: {
+                        deleted: true
+                    } 
+                }
             }
         default :
             return state;

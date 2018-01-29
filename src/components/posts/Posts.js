@@ -70,6 +70,7 @@ class Posts extends Component {
         e.preventDefault();
         this.setState({
             post: {
+                ...this.state.post,
                 [e.target.name]: e.target.value
             }
         })
