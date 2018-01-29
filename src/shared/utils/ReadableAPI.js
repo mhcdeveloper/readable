@@ -36,10 +36,11 @@ export const getDetail = (id) => {
   
 //Metodo responsável por adicionar um novo post
 export const createPost = (post) => {
+  let id = Math.random();
   return (
     fetch(`${url}/posts/`,{ method: 'POST',  headers: { ...headers, 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        id: 2,
+        id: Math.round(id),
         timestamp: Date.now(),
         title: post.title,
         body: post.body,
@@ -47,7 +48,25 @@ export const createPost = (post) => {
         category: 'redux',
       })
     })
-      .then(res => console.log(res))
+      .then(res => res.json())
+      .catch(err => console.log(err))
+  )
+}  
+
+//Metodo responsável por adicionar um novo post
+export const updatePost = (post) => {
+  return (
+    fetch(`${url}/posts/${post.id}`,{ method: 'PUT',  headers: { ...headers, 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: post.id,
+        timestamp: Date.now(),
+        title: post.title,
+        body: post.body,
+        author: post.author, 
+        category: 'redux',
+      })
+    })
+      .then(res => res.json())
       .catch(err => console.log(err))
   )
 }  
@@ -67,7 +86,7 @@ export const voteScorePost = (vote) => {
 export const removePost = (id) => {
   return (
     fetch(`${url}/posts/${id}`, { method: 'DELETE', headers: { ...headers, 'Content-type': 'application/json' } })
-      .then(res => console.log(res))
+      .then(res => res.json())
       .catch(err => console.log(err))
   )
 }
@@ -105,17 +124,18 @@ export const getCommentPost = (id) =>  {
 
 //Metodo responsável por adicionar um novo comentario
 export const createComment = (comment, parentId) => {
+  let id = Math.random();
   return (
     fetch(`${url}/comments/`,{ method: 'POST',  headers: { ...headers, 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        id: 2,
+        id: Math.round(id),
         timestamp: Date.now(),
         body: comment.body,
         author: comment.author, 
         parentId: parentId
       })
     })
-      .then(res => console.log(res))
+      .then(res => res.json())
       .catch(err => console.log(err))
   )
 }  
@@ -136,7 +156,7 @@ export const voteScoreComment = (vote) => {
 export const removeComment = (id) => {
   return (
     fetch(`${url}/comments/${id}`, { method: 'DELETE', headers: { ...headers, 'Content-type': 'application/json' } })
-      .then(res => console.log(res))
+      .then(res => res.json())
       .catch(err => console.log(err))
   )
 }
@@ -169,7 +189,7 @@ export const getAllCategories = () => {
 
 
 
-  export const updatePost = (post) =>
+  export const updatePost2 = (post) =>
     fetch(`${url}/posts/${post.id}`, { method: 'PUT',  headers },{
       body: JSON.stringify({ post })
     }).then(res => res.json())

@@ -28,15 +28,18 @@ export const voteScoreComment = (vote) => dispatch => {
         .catch(err => console.log(err));
 }
 
+//Metodo responsavel por setar no redux o novo comentario
+export const createCommentRedux = (comment) => {
+    return {
+        type: 'CREATE_COMMENT',
+        comment
+    }
+}
+
 //Metodo responsavel por criar o comment
 export const createComment = (comment, parentId) => dispatch => {
     ReadableAPI.createComment(comment, parentId)
-                .then(res => {
-                    return {
-                        type: 'CREATE_COMMENT',
-                        payload: res
-                    }
-                })
+                .then(res => dispatch(createCommentRedux(res)))
                 .catch(err => console.log(err));
 }
 

@@ -6,11 +6,12 @@ import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
 
-import { voteScorePost } from '../../actions/PostsAction'; 
-import { fetchComments, createComment } from '../../actions/CommentsAction';
+import { voteScorePost, removePost } from '../../actions/PostsAction'; 
+import { fetchComments, createComment, removeComment } from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
 import ModalRemove from '../../shared/ModalRemove';
 import ModalPost from './ModalPost';
+import Redirect from 'react-router-dom/Redirect';
 
 class PostDetail extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class PostDetail extends Component {
         this.buscarDetail();
     }
     
+    //Responsavel por buscar o detail do post
     buscarDetail = () => {
         const id = this.props.match.params.id;
         ReadableAPI.getDetail(id)
@@ -47,12 +49,13 @@ class PostDetail extends Component {
             });
     }
 
+    //Responsavel por buscar os comentario do post
     buscarComentario = () => {
         const id = this.props.match.params.id;
         this.props.fetchComments(id);    
     }
 
-    
+    //Responsavel por fechar ou abrir o modal do comment
     changeOpenComment = () => {
         this.setState({ 
             modalIsOpenComment: !this.state.modalIsOpenComment,
@@ -77,6 +80,7 @@ class PostDetail extends Component {
         });
     }
 
+    //Responsavel por fechar o modal remove
     closeModalRemove = () => {
         this.setState({
             modalIsOpen: false,
@@ -94,7 +98,6 @@ class PostDetail extends Component {
         });
     }
     
-    
     //Metodo responsavel por editar um post
     editPost = (post) => {
         this.setState({
@@ -106,7 +109,7 @@ class PostDetail extends Component {
 
     //Metodo responsavel por remover o post
     removePost = (post) => {
-        console.log(post);
+        this.props.removePost(post.id);
     }
     
     //Metodo responsavel por vote score do post
@@ -129,15 +132,15 @@ class PostDetail extends Component {
         } else {
             //inserir no servidor aqui
             this.props.createComment(values, parentId);
-//            this.props.createPost(values);
-  //          this.setState({ post: {} });
         }
     }
     
     //Metodo responsavel por editar um post
     editComment = (comment) => {
         this.setState({
-            comment,
+            comment: {
+                ...comment
+            },
             modalIsOpenComment: true
         });
         console.log(comment);
@@ -145,13 +148,18 @@ class PostDetail extends Component {
     
     //Metodo responsavel por remover o comment
     removeComment = (comment) => {
-        console.log(comment);
+        this.props.removeComment(comment.id);
     }
     
-    
     render () {
-        const { editPost, removePost, comments } = this.props;
+        const { editPost, removePost, comments, redirect } = this.props;
         const { post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
+        
+        //Responsavel por fazer o redirect quando for deletado o post
+        if(redirect) {
+            console.log(redirect)
+            return <Redirect to='/posts' />
+        }
         return (
             <div>
                 {post ? 
@@ -216,14 +224,17 @@ class PostDetail extends Component {
         );
     }
 }
-const mapStateToProps = ({ commentReducer }) => ({
+const mapStateToProps = ({ commentReducer, postReducer }) => ({
     comments: commentReducer.comments,
+    redirect: postReducer.redirect
 })
 
 const mapDispatchToProps = dispatch => ({
     fetchComments: (id) => dispatch(fetchComments(id)),
     createComment: (comment, parentId) => dispatch(createComment(comment, parentId)),
-    voteScorePost: (vote) => dispatch(voteScorePost(vote))
+    removeComment: (comment) => dispatch(removeComment(comment)),
+    voteScorePost: (vote) => dispatch(voteScorePost(vote)),
+    removePost: (post) => dispatch(removePost(post))
 })
 
 export default connect (mapStateToProps, mapDispatchToProps)(PostDetail);

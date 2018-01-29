@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
 import ModalRemove from '../../shared/ModalRemove';
-import { createPost, fetchPosts, removePost } from '../../actions/PostsAction';
+import { createPost, fetchPosts, removePost, updatePost } from '../../actions/PostsAction';
 
 class Posts extends Component {
     constructor(props) {
@@ -84,23 +84,28 @@ class Posts extends Component {
             this.editPost(values);
         } else {
             //inserir no servidor aqui
-            ReadableAPI.createPost(values)
-                .then(res => console.log(res))
-                .catch(err => console.log(err));
-//            this.props.createPost(values);
-  //          this.setState({ post: {} });
+            this.props.createPost(values);
         }
     }
 
     //Responsavel por editar o post
     editPost = (post) => {
         this.setState({
-            post,
+            post: {
+                ...post
+            }
+        })
+        this.props.updatePost(this.state.post);
+    }
+
+    //Responsavel por abrir o dialog com os input setado
+    openEditPost = (post) => {
+        this.setState({
+            post: {
+                ...post
+            },
             modalIsOpen: true
         });
-
-        ReadableAPI.updatePost(this.state.post)
-            .then((res) => console.log(res));
     }
 
     //Responsavel por remover o post
@@ -123,7 +128,7 @@ class Posts extends Component {
                             <PostItem 
                                 key={post.id}
                                 post={post}
-                                editPost={this.editPost}
+                                editPost={this.openEditPost}
                                 removePost={this.openModalRemove} 
                             />
                         );
@@ -153,13 +158,13 @@ class Posts extends Component {
 
 const mapStateToProps = ({ postReducer }) => ({
     posts: postReducer.posts,
-    open: postReducer.open
 })
 
 const mapDispatchToProps = dispatch => ({
     createPost: (post) => dispatch(createPost(post)),
     fetchPosts: () => dispatch(fetchPosts()),
-    removePost: (id) => dispatch(removePost(id))
+    removePost: (id) => dispatch(removePost(id)),
+    updatePost: (post) => dispatch(updatePost(post)) 
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

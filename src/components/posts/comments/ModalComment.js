@@ -18,8 +18,8 @@ const ModalComment = ({ isOpen, closeModal, comment, insertComment, handleChange
                             <form onSubmit={insertComment}>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <label htmlFor="descricao">Body</label>
-                                        <input type="text" name="descricao" className="form-control" id="descricao" placeholder="Descrição" value={comment.body} onChange={handleChange.bind(this)} required/>
+                                        <label htmlFor="body">Body</label>
+                                        <input type="text" name="body" className="form-control" id="body" placeholder="Descrição" value={comment.body} onChange={handleChange.bind(this)} required/>
                                     </div>
                                 </div>
                                 <br />

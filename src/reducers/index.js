@@ -8,6 +8,7 @@ import {
 
 const initialPostsState = {
     posts: [],
+    redirect: false
 }
 
 function postReducer  (state = initialPostsState, action) {
@@ -21,7 +22,11 @@ function postReducer  (state = initialPostsState, action) {
             return {
                 ...state
             }
-        
+        case 'REMOVE_POST':
+            return {
+                ...state,
+                redirect: action.redirect
+            }
         default :
             return state;
     }
@@ -32,6 +37,7 @@ const initialCommentState = {
 }
 
 function commentReducer (state = initialCommentState, action) {
+    const { comment } = action;
     switch (action.type) {
         case 'GET_ALL_COMMENTS' :
             return {
@@ -40,7 +46,7 @@ function commentReducer (state = initialCommentState, action) {
             }
         case 'CREATE_COMMENT' :
             return {
-                ...state
+                ...state,
             }
         default :
             return state;
@@ -52,7 +58,6 @@ const initialCategoryState = {
 }
 
 function categoryReducer (state = initialCategoryState, action) {
-    console.log(action.payload);
     switch(action.type) {
         case 'GET_ALL_CATEGORIES' :
             return {
