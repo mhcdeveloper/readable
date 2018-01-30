@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as ReadableAPI from '../../../shared/utils/ReadableAPI';
-import { voteScoreComment, removeComment } from '../../../actions/CommentsAction';
+import { voteScoreComment, removeComment, openModalRemoveCommentRedux } from '../../../actions/CommentsAction';
 import ModalRemove from '../../../shared/ModalRemove';
 
 class Comments extends Component {
@@ -17,9 +17,9 @@ class Comments extends Component {
     //Metodo responsavel por abrir o modalRemove
     openModalRemove = (comment) => {
         this.setState({
-            isModalRemove: !this.state.isModalRemove,
             comment
         });
+        this.props.openModalRemoveCommentRedux();
     }
 
     //Responsavel por fechar o modalRemove
@@ -40,13 +40,13 @@ class Comments extends Component {
     }
 
     //Responsavel por remover o comment
-    removeComment = (comment) => {
-        this.props.removeComment(comment.id);
+    remove = (comment) => {
+        console.log('ok');
+        //this.props.removeComment(comment.id);
     }
 
     render () {
-        const { isModalRemove } = this.state;
-        const { comment, editComment, removeComment } = this.props;
+        const { comment, editComment, removeComment, isModalRemove } = this.props;
         return (
             <div className="card">
                 <div className="card-block">
@@ -66,7 +66,7 @@ class Comments extends Component {
                         isOpen={isModalRemove} 
                         closeModalRemove={this.closeModalRemove} 
                         registro={comment} 
-                        removerRegistro={this.removeComment}
+                        removerRegistro={this.remove}
                     />
                 </div>
             </div>
@@ -74,9 +74,14 @@ class Comments extends Component {
     }
 }
 
+const mapStateToProps = ({ commentReducer }) => ({
+    isModalRemove: commentReducer.isModalRemove
+})
+
 const mapDispatchToProps = dispatch => ({
     voteScoreComment: (vote) => dispatch(voteScoreComment(vote)),
-    removeComment: (id) => dispatch(removeComment(id))
+    removeComment: (id) => dispatch(removeComment(id)),
+    openModalRemoveCommentRedux: () => dispatch(openModalRemoveCommentRedux())
 })
 
 export default connect(null, mapDispatchToProps)(Comments);

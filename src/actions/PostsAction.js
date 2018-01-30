@@ -34,30 +34,36 @@ export const createPost = (post) => dispatch => {
         .catch(err => console.log(err));
 }
 
+//Responsavel por setar o voteScore
+export const voteScorePostRedux = (post) => {
+    return {
+        type: 'VOTE_SCORE_POST',
+        post,
+        voteScore: post.voteScore
+    }
+}
+
 //Responsavel por fazer o vote score do post
 export const voteScorePost = (vote) => dispatch => {
     ReadableAPI.voteScorePost(vote)
-        .then(res => {
-            return {
-                type: 'VOTE_SCORE_POST',
-                payload: res
-            }
-        })
+        .then(res => dispatch(voteScorePostRedux(res)))
         .catch(err => console.log(err));
 }
 
 //Responsavel por setar o post no redux
-export const removePostRedux = () => {
+export const removePostRedux = (res) => {
     return  {
         type: 'REMOVE_POST',
-        redirect: true
+        redirect: true,
+        post: res
     }
 }
 
 //Responsavel por remover o post
 export const removePost = (id) => dispatch => {
+    console.log('remove post')
     ReadableAPI.removePost(id)
-        .then(res => dispatch(removePostRedux()))
+        .then(res => dispatch(removePostRedux(res)))
         .catch(err => console.log(err));
 }
 
@@ -71,4 +77,12 @@ export const updatePost = (post) => dispatch => {
             }            
         })
         .catch(err => console.log(err));
+}
+
+//Responsavel por abrir o modal de remove
+export const openModalRemovePostRedux = () => {
+    return {
+        type: 'OPEN_MODAL_REMOVE',
+        payload: true
+    }
 }

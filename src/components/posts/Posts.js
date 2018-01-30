@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
 import ModalRemove from '../../shared/ModalRemove';
-import { createPost, fetchPosts, removePost, updatePost } from '../../actions/PostsAction';
+import { createPost, fetchPosts, removePost, updatePost, voteScorePost } from '../../actions/PostsAction';
 
 class Posts extends Component {
     constructor(props) {
@@ -111,13 +111,21 @@ class Posts extends Component {
 
     //Responsavel por remover o post
     removePost = (post) => {
-    //    console.log(post);
         this.props.removePost(post.id);
     }
 
+    //Metodo responsavel por vote score do post
+    votePost = (post, option) => {
+        const vote = {
+            post,
+            option
+        }
+        this.props.voteScorePost(vote);
+    }
+
     render () {
-        const { post, modalIsOpen, isModalRemove } = this.state;
-        const { posts } = this.props;
+        const { post, modalIsOpen } = this.state;
+        const { posts, isModalRemove } = this.props;
         return (
             <div>
                 <div className="open-modal-post">
@@ -131,6 +139,7 @@ class Posts extends Component {
                                 post={post}
                                 editPost={this.openEditPost}
                                 removePost={this.openModalRemove} 
+                                votePost={this.votePost}
                             />
                         );
                     })}
@@ -159,13 +168,15 @@ class Posts extends Component {
 
 const mapStateToProps = ({ postReducer }) => ({
     posts: postReducer.posts,
+    isModalRemove: postReducer.isModalRemove
 })
 
 const mapDispatchToProps = dispatch => ({
     createPost: (post) => dispatch(createPost(post)),
     fetchPosts: () => dispatch(fetchPosts()),
     removePost: (id) => dispatch(removePost(id)),
-    updatePost: (post) => dispatch(updatePost(post)) 
+    updatePost: (post) => dispatch(updatePost(post)),
+    voteScorePost: (vote) => dispatch(voteScorePost(vote)), 
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

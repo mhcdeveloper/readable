@@ -16,15 +16,19 @@ export const fetchComments = (id) => dispatch => {
         .then((comments) => dispatch(getAllComments(comments)));
 }
 
+//Responsavel por setar o novo scorte no redux
+export const voteScoreCommentRedux = (comment) => {
+    return {
+        type: 'VOTE_SCORE_COMMENT',
+        comment,
+        voteScore: comment.voteScore
+    }
+}
+
 //Responsavel por fazer o vote score do comment
 export const voteScoreComment = (vote) => dispatch => {
     ReadableAPI.voteScoreComment(vote)
-        .then(res => {
-            return {
-                type: 'VOTE_SCORE_COMMENT',
-                payload: res
-            }
-        })
+        .then(res => dispatch(voteScoreCommentRedux(res)))
         .catch(err => console.log(err));
 }
 
@@ -47,13 +51,23 @@ export const createComment = (comment, parentId) => dispatch => {
 export const removeCommentRedux = (comment) => {
     return {
         type: 'REMOVE_COMMENT',
-        comment
+        commentId: comment.id
     }
 }
 
 //Responsavel por remover o comment
 export const removeComment = (id) => dispatch => {
+    console.log(id+'id do action')
     ReadableAPI.removeComment(id)
-        .then(res => console.log(res))
+        .then(res => dispatch(removeCommentRedux(res)))
         .catch(err => console.log(err));
+}
+
+//Responsavel por abrir o modal de remove
+export const openModalRemoveCommentRedux = () => {
+    console.log('abrir modal')
+    return {
+        type: 'OPEN_MODAL_REMOVE',
+        payload: true
+    }
 }

@@ -6,8 +6,8 @@ import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
 
-import { voteScorePost, removePost } from '../../actions/PostsAction'; 
-import { fetchComments, createComment, removeComment } from '../../actions/CommentsAction';
+import { voteScorePost } from '../../actions/PostsAction'; 
+import { fetchComments, createComment, removeComment, openModalRemoveCommentRedux } from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
 import ModalRemove from '../../shared/ModalRemove';
 import ModalPost from './ModalPost';
@@ -75,9 +75,9 @@ class PostDetail extends Component {
     //Metodo responsavel por abrir o modalRemove
     openModalRemove = (post, comment) => {
         this.setState({
-            isModalRemove: !this.state.isModalRemove,
             post
         });
+        this.props.openModalRemoveCommentRedux();
     }
 
     //Responsavel por fechar o modal remove
@@ -99,29 +99,6 @@ class PostDetail extends Component {
         });
     }
     
-    //Metodo responsavel por editar um post
-    editPost = (post) => {
-        this.setState({
-            post,
-            modalIsOpen: true
-        });
-        console.log(post);
-    }
-
-    //Metodo responsavel por remover o post
-    removePost = (post, index) => {
-        this.props.removePost(post.id, index);
-    }
-    
-    //Metodo responsavel por vote score do post
-    votePost = (post, option) => {
-        const vote = {
-            post,
-            option
-        }
-        this.props.voteScorePost(vote);
-    }
-
     //Metodo responsavel por adicionar um novo comentario
     insertComment = (e) => {
         e.preventDefault();
@@ -153,12 +130,11 @@ class PostDetail extends Component {
     }
     
     render () {
-        const { editPost, removePost, comments, redirect } = this.props;
-        const { post, modalIsOpen, isModalRemove, modalIsOpenComment, comment } = this.state;
+        const { editPost, removePost, votePost, comments, redirect, isModalRemove } = this.props;
+        const { post, modalIsOpen, modalIsOpenComment, comment } = this.state;
         
         //Responsavel por fazer o redirect quando for deletado o post
         if(redirect) {
-            console.log(redirect)
             return <Redirect to='/posts' />
         }
         return (
@@ -178,10 +154,10 @@ class PostDetail extends Component {
                                 <small className="text-muted">{post.commentCount} <i className="glyphicon glyphicon-comment"></i> </small>
                                 <small className="text-muted">{post.voteScore} <i className="glyphicon glyphicon-thumbs-up"></i></small>
                             </p>
-                            <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 1)}><i className="glyphicon glyphicon-thumbs-up"></i></a>
-                            <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 0)}><i className="glyphicon glyphicon-thumbs-down"></i></a>
+                            <a href="#" className="btn btn-primary" onClick={() => votePost(post, 1)}><i className="glyphicon glyphicon-thumbs-up"></i></a>
+                            <a href="#" className="btn btn-primary" onClick={() => votePost(post, 0)}><i className="glyphicon glyphicon-thumbs-down"></i></a>
                             
-                            {comments.filter(comment => comment.deleted === false).map(comment => 
+                            {comments.map(comment => 
                                 <Comments 
                                     key={comment.id} 
                                     comment={comment}
@@ -227,6 +203,7 @@ class PostDetail extends Component {
 }
 const mapStateToProps = ({ commentReducer, postReducer }) => ({
     comments: commentReducer.comments,
+    isModalRemove: postReducer.isModalRemove,
     redirect: postReducer.redirect
 })
 
@@ -234,8 +211,7 @@ const mapDispatchToProps = dispatch => ({
     fetchComments: (id) => dispatch(fetchComments(id)),
     createComment: (comment, parentId) => dispatch(createComment(comment, parentId)),
     removeComment: (comment) => dispatch(removeComment(comment)),
-    voteScorePost: (vote) => dispatch(voteScorePost(vote)),
-    removePost: (post) => dispatch(removePost(post))
+    openModalRemoveCommentRedux: () => dispatch(openModalRemoveCommentRedux())
 })
 
 export default connect (mapStateToProps, mapDispatchToProps)(PostDetail);
