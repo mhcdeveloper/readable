@@ -46,3 +46,7 @@ body {
 .btn-new-comment {
   text-align: center
 }
+
+.card-block {
+  padding: 50px;
+}

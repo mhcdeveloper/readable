@@ -27,7 +27,8 @@ class PostDetail extends Component {
                 author: '',
                 body: '',
                 id: '',
-                title: ''
+                title: '',
+                category: ''
             },
             comment: {
                 id: '',
@@ -38,13 +39,16 @@ class PostDetail extends Component {
             postEdit: {},
             modalIsOpen: false,
             isModalRemove: false,
-            modalIsOpenComment: false
+            modalIsOpenComment: false,
+            categories: [],
+            category: ''
         }
     }
 
     componentWillMount() {
         Modal.setAppElement('body');
         this.buscarDetail();
+        this.getAllCategories();
     }
     
     //Responsavel por buscar o detail do post
@@ -57,6 +61,12 @@ class PostDetail extends Component {
                     this.buscarComentario()
                 )
             });
+    }
+
+    //Responsavel por buscar todos as categorias
+    getAllCategories = () => {
+        ReadableAPI.getAllCategories()
+            .then(categories => this.setState({ categories: categories.categories }));
     }
 
     //Responsavel por buscar os comentario do post
@@ -157,9 +167,9 @@ class PostDetail extends Component {
             redirect, 
             isModalRemove, 
             modalIsOpenComment, 
-            modalIsOpen 
+            modalIsOpen
         } = this.props;
-        const { post, comment } = this.state;
+        const { post, comment, categories } = this.state;
         
         //Responsavel por fazer o redirect quando for deletado o post
         if(redirect) {
@@ -214,6 +224,7 @@ class PostDetail extends Component {
                         post={post}
                         insertPost={this.editPost} 
                         handleChange={this.handleChange}
+                        categories={categories}
                     />
                 </div> 
             </div>

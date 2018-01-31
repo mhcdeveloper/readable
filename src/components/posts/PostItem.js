@@ -24,6 +24,9 @@ class PostItem extends Component {
             <div>
                 <div className="card">
                     <div className="card-block">
+                        <div className="btn btn-success">
+                            <span>{post.category}</span>
+                        </div>
                         <h3 className="card-title">{post.title}</h3>
                         <p className="card-text">{post.author}</p>
                         <p className="card-text">

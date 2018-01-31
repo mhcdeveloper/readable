@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange }) => {
+const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange, categories }) => {
     return (
         <div>
             <Modal
@@ -39,6 +39,20 @@ const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange }) => {
                                     <div className="col-md-12">
                                         <label htmlFor="author">Author</label>
                                         <input type="text" name="author" className="form-control" id="author" placeholder="Author" value={post.author} onChange={handleChange.bind(this)} required/>
+                                    </div>
+                                </div>
+                                <br />
+                                <div className="row">
+                                    <div className="col-md-12">
+                                    <label htmlFor="category">Categories</label>
+                                    <select className="form-control" id="category" name="category" value={post.category} onChange={handleChange.bind(this)} required>
+                                        <option value=''>All Posts</option>
+                                            {categories.map((category) => {
+                                                return (
+                                                    <option key={category.name} value={category.name}>{category.name}</option>
+                                                );
+                                            })}
+                                    </select>
                                     </div>
                                 </div>
                                 <br />

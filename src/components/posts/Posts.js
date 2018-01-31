@@ -27,6 +27,7 @@ class Posts extends Component {
                 body: '',
                 id: '',
                 title: '',
+                category: '',
             },
             posts: [],
             modalIsOpen: false,
@@ -77,6 +78,7 @@ class Posts extends Component {
                 body: '',
                 id: '',
                 title: '',
+                category: '',
             },
         })
         this.props.openModalPostRedux();
@@ -121,7 +123,7 @@ class Posts extends Component {
             <div>
                 <div>
                     <form>
-                        <select id="unidadeMedida" name="unidade_medida" value={category} onChange={this.setarCategory} required>
+                        <select id="category" name="category" value={category} onChange={this.setarCategory} required>
                         <option value=''>All Posts</option>
                             {categories.map((category) => {
                                 return (
@@ -153,6 +155,7 @@ class Posts extends Component {
                         post={post}
                         insertPost={this.insertPost} 
                         handleChange={this.handleChange}
+                        categories={categories}
                     />
                 </div>
             </div>

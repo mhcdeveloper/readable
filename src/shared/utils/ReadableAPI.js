@@ -62,7 +62,7 @@ export const createPost = (post) => {
         title: post.title,
         body: post.body,
         author: post.author, 
-        category: 'redux',
+        category: post.category,
       })
     })
       .then(res => res.json())
@@ -80,7 +80,7 @@ export const updatePost = (post) => {
         title: post.title,
         body: post.body,
         author: post.author, 
-        category: 'redux',
+        category: post.category,
       })
     })
       .then(res => res.json())
