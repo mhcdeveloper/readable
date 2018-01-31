@@ -6,16 +6,16 @@ import { connect } from 'react-redux';
 
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
-import ModalRemove from '../../shared/ModalRemove';
 import { 
     createPost, 
-    fetchPosts, 
+    fetchPostsByCategory,
     removePost, 
     updatePost, 
     voteScorePost, 
     openModalRemovePostRedux,
     openModalPostRedux 
 } from '../../actions/PostsAction';
+import { fetchCategories, setCategory } from '../../actions/CategoryAction';
 
 class Posts extends Component {
     constructor(props) {
@@ -30,14 +30,33 @@ class Posts extends Component {
             },
             posts: [],
             modalIsOpen: false,
-            isModalRemove: false
+            isModalRemove: false,
+            categories: [],
+            category: ''
         }
     }
 
     componentWillMount() {
         Modal.setAppElement('body');
-        this.props.fetchPosts();
+        this.getAllCategories();
+        let category = '';
+        this.props.fetchPostsByCategory(category);
     }
+
+    //Responsavel por buscar todos as categorias
+    getAllCategories = () => {
+        ReadableAPI.getAllCategories()
+            .then(categories => this.setState({ categories: categories.categories }));
+    }
+
+    //Responsavel por alterar as category do action creator
+    setarCategory = (e) => {
+        e.preventDefault();
+        this.setState({
+            category: e.target.value
+        })
+        this.props.fetchPostsByCategory(e.target.value);
+    } 
 
     //Responsavel por atualizar os input
     handleChange = (e) => {
@@ -48,6 +67,19 @@ class Posts extends Component {
                 [e.target.name]: e.target.value
             }
         })
+    }
+
+    //Responsavel por limpar os campos do modal e chamar o metodo que abre ou fecha o modal
+    changeOpenModal = () => {
+        this.setState({
+            post: {
+                author: '',
+                body: '',
+                id: '',
+                title: '',
+            },
+        })
+        this.props.openModalPostRedux();
     }
 
     //Responsavel por inserir um post
@@ -83,10 +115,22 @@ class Posts extends Component {
     }
 
     render () {
-        const { post } = this.state;
+        const { post, categories, category } = this.state;
         const { posts, isModalRemove, modalIsOpen, openModalPostRedux } = this.props;
         return (
             <div>
+                <div>
+                    <form>
+                        <select id="unidadeMedida" name="unidade_medida" value={category} onChange={this.setarCategory} required>
+                        <option value=''>All Posts</option>
+                            {categories.map((category) => {
+                                return (
+                                    <option key={category.name} value={category.name}>{category.name}</option>
+                                );
+                            })}
+                        </select>
+                    </form>
+                </div>
                 <div className="open-modal-post">
                     <button onClick={openModalPostRedux}>+</button>
                 </div>
@@ -105,18 +149,10 @@ class Posts extends Component {
                 <div>
                     <ModalPost 
                         isOpen={modalIsOpen}
-                        closeModal={openModalPostRedux}
+                        closeModal={this.changeOpenModal}
                         post={post}
                         insertPost={this.insertPost} 
                         handleChange={this.handleChange}
-                    />
-                </div>
-                <div>
-                    <ModalRemove 
-                        isOpen={isModalRemove} 
-                        closeModalRemove={openModalRemovePostRedux} 
-                        registro={post} 
-                        removerRegistro={this.removePost}
                     />
                 </div>
             </div>
@@ -124,19 +160,23 @@ class Posts extends Component {
     }
 }
 
-const mapStateToProps = ({ postReducer }) => ({
+const mapStateToProps = ({ postReducer, categoryReducer }) => ({
     posts: postReducer.posts,
     isModalRemove: postReducer.isModalRemove,
-    modalIsOpen: postReducer.modalIsOpen
+    modalIsOpen: postReducer.modalIsOpen,
+    category: categoryReducer.category,
+    categories: categoryReducer.categories,
 })
 
 const mapDispatchToProps = dispatch => ({
     createPost: (post) => dispatch(createPost(post)),
-    fetchPosts: () => dispatch(fetchPosts()),
     removePost: (id) => dispatch(removePost(id)),
     updatePost: (post) => dispatch(updatePost(post)),
     openModalRemovePostRedux: () => dispatch(openModalRemovePostRedux()),
-    openModalPostRedux: () => dispatch(openModalPostRedux())
+    openModalPostRedux: () => dispatch(openModalPostRedux()),
+    fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category)),
+    fetchCategories: (categories) => dispatch(fetchCategories(categories)),
+    setCategory: (category) => dispatch(setCategory(category))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

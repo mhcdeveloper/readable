@@ -22,6 +22,17 @@ const headers = {
   Inicio dos Metodos relacionados ao posts
 */
 
+//Buscar os posta por categoria
+export const getPostsByCategory = (category) => {
+  console.log(category);
+  return (
+    fetch(`${url}/${category}/posts`, {headers})
+      .then(res => res.json())
+      .catch(err => console.log(err))
+  )
+}
+
+
 //GetAll busca todos os posts
 export const getAllPosts = () => {
   return (

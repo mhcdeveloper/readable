@@ -9,8 +9,8 @@ const Body = () => {
     return (
         <div className="container">
             <Route exact path="/posts" component={Posts} />
-            <Route path="/posts/detail/:id" component={PostDetail} />
-            <Route path="/categories" component={Categories} />
+            <Route exact path="/posts/detail/:id" component={PostDetail} />
+            <Route exact path="/categories" component={Categories} />
         </div>
     );
 }

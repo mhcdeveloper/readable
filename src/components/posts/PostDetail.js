@@ -16,7 +16,6 @@ import {
     updateComment 
 } from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
-import ModalRemove from '../../shared/ModalRemove';
 import ModalPost from './ModalPost';
 import Redirect from 'react-router-dom/Redirect';
 
@@ -217,14 +216,6 @@ class PostDetail extends Component {
                         handleChange={this.handleChange}
                     />
                 </div> 
-                <div>
-                    <ModalRemove 
-                        isOpen={isModalRemove} 
-                        closeModalRemove={this.openModalRemove} 
-                        registro={post} 
-                        removerRegistro={this.removePost}
-                    />
-                </div>
             </div>
         );
     }

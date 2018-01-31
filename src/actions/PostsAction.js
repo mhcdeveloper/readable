@@ -13,10 +13,15 @@ export const getAll = (posts) => {
     }
 }
 
-//Responsavel por buscar os posts da api
-export const fetchPosts = () => dispatch => {
-    ReadableAPI.getAllPosts()
-           .then(res => dispatch(getAll(res)));
+//Responsavel por buscar os posts da api por categoria ou sem
+export const fetchPostsByCategory = (category) => dispatch => {
+    if(category) {
+        ReadableAPI.getPostsByCategory(category)
+            .then(res => dispatch(getAll(res)))
+    } else {
+        ReadableAPI.getAllPosts()
+            .then(res => dispatch(getAll(res)));    
+    }
 }
 
 //Responsavel por setar o novo post no redux

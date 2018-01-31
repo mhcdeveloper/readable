@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
 import CategoryItem from './CategoryItem';
 import ModalCategory from './ModalCategory';
-import { getAllCategories } from '../../actions/CategoryAction';
+import { fetchCategories } from '../../actions/CategoryAction';
 
 class Categories extends Component {
     constructor(props) {
@@ -22,8 +22,7 @@ class Categories extends Component {
 
     componentWillMount() {
         Modal.setAppElement('body');
-        ReadableAPI.getAllCategories()
-           .then(res => this.props.getAll(res));
+        this.props.fetchCategories();
     }
 
     handleChange = (e) => {
@@ -59,7 +58,7 @@ const mapStateToProps = ({ categoryReducer }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    getAll: (categories) => dispatch(getAllCategories(categories))
+    fetchCategories: (categories) => dispatch(fetchCategories(categories))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);

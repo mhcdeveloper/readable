@@ -8,6 +8,11 @@ import {
 import { voteScorePost } from '../actions/PostsAction';
 import { removeObjectInArrayById, updateObjectInArrayById } from '../shared/utils/array';
 
+
+
+/*INICIO REDUCER DE POSTS */
+
+
 const initialPostsState = {
     posts: [],
     redirect: false,
@@ -94,21 +99,9 @@ const addVotePost = (state, post, voteScore) => {
     }
 }
 
+/*FIM REDUCER DE POSTS */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*INICIO REDUCER DE COMMENTS */
 
 
 const initialCommentState = {
@@ -174,6 +167,9 @@ const updateComment = (state, comment) => {
 
 //Metodo responsavel por remover o Post do array
 const removeComment = (state, commentId) => {
+    //Caso esteja limpando todos os comentarios terei que colocar a função direto pq esta perdendo a referença do metodo
+    //removeObjectInArrayById
+    //state.comments.filter(item => item.id !== commentId)
     return { 
         ...state,
         comments: removeObjectInArrayById(state.posts, commentId)
@@ -199,38 +195,37 @@ const addVote = (state, comment, voteScore) => {
     }
 }
 
+/*FIM REDUCER DE COMMENTS */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*INICIO REDUCER DE CATEGORIES */
 
 const initialCategoryState = {
-    categories: []
+    categories: [],
+    category: ''
 }
 
 function categoryReducer (state = initialCategoryState, action) {
+    const { categories, category } = action;
+    console.log(action)
     switch(action.type) {
         case 'GET_ALL_CATEGORIES' :
             return {
                 ...state,
-                categories: action.payload
+                categories
             }
+
+        case 'SET_CATEGORY' :
+            return {
+                ...state,
+                category
+            }
+
         default :
             return state;
     }
 }
+
+
+/*FIM REDUCER DE CATEGORIES */
 
 export default combineReducers({ postReducer, commentReducer, categoryReducer });

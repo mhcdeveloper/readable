@@ -13,10 +13,7 @@ const NavBar = () => {
                     <li className="nav-item">
                         <Link to='/posts' className="nav-link">Posts</Link>
                     </li>
-                    <li className="nav-item">
-                        <Link to='/categories' className="nav-link">Category</Link>
-                    </li>
-                </ul>
+                    </ul>
             </div>
         </nav>    
     )
