@@ -39,24 +39,6 @@ class Posts extends Component {
         this.props.fetchPosts();
     }
 
-    openModal = () => {
-        this.setState({
-            modalIsOpen: true
-        });
-    }    
-
-    closeModal = () => {
-        this.setState({
-            modalIsOpen: false,
-            post: {
-                author: '',
-                body: '',
-                id: '',
-                title: '',
-            }
-        });
-    }
-
     //Responsavel por atualizar os input
     handleChange = (e) => {
         e.preventDefault();
@@ -99,6 +81,7 @@ class Posts extends Component {
     removePost = (post) => {
         this.props.removePost(post.id);
     }
+
     render () {
         const { post } = this.state;
         const { posts, isModalRemove, modalIsOpen, openModalPostRedux } = this.props;
@@ -114,8 +97,7 @@ class Posts extends Component {
                                 key={post.id}
                                 post={post}
                                 editPost={this.openEditPost}
-                                removePost={this.openModalRemove} 
-                                votePost={this.votePost}
+                                removePost={this.removePost} 
                             />
                         );
                     })}
@@ -153,7 +135,6 @@ const mapDispatchToProps = dispatch => ({
     fetchPosts: () => dispatch(fetchPosts()),
     removePost: (id) => dispatch(removePost(id)),
     updatePost: (post) => dispatch(updatePost(post)),
-    voteScorePost: (vote) => dispatch(voteScorePost(vote)), 
     openModalRemovePostRedux: () => dispatch(openModalRemovePostRedux()),
     openModalPostRedux: () => dispatch(openModalPostRedux())
 })

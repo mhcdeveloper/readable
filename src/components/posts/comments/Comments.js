@@ -40,12 +40,6 @@ class Comments extends Component {
         this.props.voteScoreComment(vote);
     }
 
-    //Responsavel por remover o comment
-    remove = (comment) => {
-        console.log('ok');
-        //this.props.removeComment(comment.id);
-    }
-
     render () {
         const { comment, editComment, removeComment } = this.props;
         return (
@@ -60,7 +54,7 @@ class Comments extends Component {
                 </div>
                 <div className="card-block">
                     <a href="#" className="card-link" onClick={() => editComment(comment)}><i className="glyphicon glyphicon-edit"></i></a>
-                    <a href="#" className="card-link" onClick={() => this.openModalRemove(comment)}><i className="glyphicon glyphicon-trash"></i></a>
+                    <a href="#" className="card-link" onClick={() => removeComment(comment.id)}><i className="glyphicon glyphicon-trash"></i></a>
                 </div>
                 <div>
                     <ModalRemove 

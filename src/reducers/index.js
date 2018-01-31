@@ -16,14 +16,14 @@ const initialPostsState = {
 }
 
 function postReducer  (state = initialPostsState, action) {
-    const { post, payload } = action;
+    const { post, payload, postDetail } = action;
     switch (action.type) {
         case 'GET_ALL_POST':
             return {
                 ...state,
                 posts: payload
             }
-        
+            
         case 'CREATE_POST':
             return {
                 ...state,
@@ -70,7 +70,8 @@ const updatePost = (state, post) => {
 const removePost = (state, postId) => {
     return { 
         ...state,
-        posts: removeObjectInArrayById(state.posts, postId)
+        posts: removeObjectInArrayById(state.posts, postId),
+        redirect: !state.redirect
     }
 }
 
@@ -166,7 +167,8 @@ const updateComment = (state, comment) => {
     return {
         ...state,
         comments: updateObjectInArrayById(state.comments, comment),
-        modalIsOpenComment: !state.modalIsOpenComment
+        modalIsOpenComment: !state.modalIsOpenComment,
+        isModalRemove: !state.isModalRemove
     }
 }
 

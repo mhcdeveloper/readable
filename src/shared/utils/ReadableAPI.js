@@ -12,6 +12,12 @@ const headers = {
 }
 
 
+
+
+
+
+
+
 /*
   Inicio dos Metodos relacionados ao posts
 */
@@ -184,6 +190,9 @@ export const removeComment = (id) => {
 
 
 
+
+
+
 /*
   Inicio dos Metodos relacionados as categories
 */
@@ -201,23 +210,3 @@ export const getAllCategories = () => {
 /*
   Fim dos Metodos relacionados as categories
 */
-
-
-
-
-  export const updatePost2 = (post) =>
-    fetch(`${url}/posts/${post.id}`, { method: 'PUT',  headers },{
-      body: JSON.stringify({ post })
-    }).then(res => res.json())
-    .catch(err => console.log(err));
-  
-export const search = (query, maxResults) =>
-  fetch(`${url}/search`, {
-    method: 'POST',
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ query, maxResults })
-  }).then(res => res.json())
-    .then(data => data.books)

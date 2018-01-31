@@ -61,6 +61,7 @@ export const removePostRedux = (res) => {
 
 //Responsavel por remover o post
 export const removePost = (id) => dispatch => {
+    console.log('entrou')
     ReadableAPI.removePost(id)
         .then(res => dispatch(removePostRedux(res)))
         .catch(err => console.log(err));
