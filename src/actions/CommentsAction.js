@@ -57,17 +57,38 @@ export const removeCommentRedux = (comment) => {
 
 //Responsavel por remover o comment
 export const removeComment = (id) => dispatch => {
-    console.log(id+'id do action')
     ReadableAPI.removeComment(id)
         .then(res => dispatch(removeCommentRedux(res)))
         .catch(err => console.log(err));
 }
 
+
+//Responsavel por setar a atualização do comment no redux
+export const updateCommentRedux = (comment) => {
+    return {
+        type: 'UPDATE_COMMENT',
+        comment
+    }            
+}
+
+//Responsavel por atualizar o comment
+export const updateComment = (comment) => dispatch => {
+    ReadableAPI.updateComment(comment)
+        .then(res => dispatch(updateCommentRedux(res)))
+        .catch(err => console.log(err));
+}
+
 //Responsavel por abrir o modal de remove
 export const openModalRemoveCommentRedux = () => {
-    console.log('abrir modal')
     return {
         type: 'OPEN_MODAL_REMOVE',
         payload: true
+    }
+}
+
+//Responsavel por abrir o modal do post
+export const openModalCommentRedux = () => {
+    return {
+        type: 'OPEN_MODAL_COMMENT'
     }
 }

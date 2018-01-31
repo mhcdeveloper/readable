@@ -7,7 +7,14 @@ import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
 
 import { voteScorePost } from '../../actions/PostsAction'; 
-import { fetchComments, createComment, removeComment, openModalRemoveCommentRedux } from '../../actions/CommentsAction';
+import { 
+    fetchComments, 
+    createComment, 
+    removeComment, 
+    openModalRemoveCommentRedux, 
+    openModalCommentRedux, 
+    updateComment 
+} from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
 import ModalRemove from '../../shared/ModalRemove';
 import ModalPost from './ModalPost';
@@ -58,7 +65,6 @@ class PostDetail extends Component {
     //Responsavel por fechar ou abrir o modal do comment
     changeOpenComment = () => {
         this.setState({ 
-            modalIsOpenComment: !this.state.modalIsOpenComment,
             comment: {
                 id: '',
                 body: '',
@@ -66,6 +72,7 @@ class PostDetail extends Component {
                 postId: ''
             } 
         });
+        this.props.openModalCommentRedux();
     }
     
     changeOpen = () => {
@@ -102,26 +109,30 @@ class PostDetail extends Component {
     //Metodo responsavel por adicionar um novo comentario
     insertComment = (e) => {
         e.preventDefault();
-        const { comment, post } = this.state;
+        const { post } = this.state;
         let parentId = post.id;
         const values = serializeForm(e.target, { hash: true });
-        if (comment.id) {
+        if (values.id) {
             this.editComment(values);
         } else {
             //inserir no servidor aqui
             this.props.createComment(values, parentId);
         }
     }
-    
-    //Metodo responsavel por editar um post
-    editComment = (comment) => {
+
+    //Responsavel por abrir o dialog com os input setado
+    openEditComment = (comment) => {
         this.setState({
             comment: {
                 ...comment
             },
-            modalIsOpenComment: true
         });
-        console.log(comment);
+        this.props.openModalCommentRedux();
+    }    
+
+    //Metodo responsavel por editar um post
+    editComment = (comment) => {
+        this.props.updateComment(comment);
     }
     
     //Metodo responsavel por remover o comment
@@ -130,8 +141,8 @@ class PostDetail extends Component {
     }
     
     render () {
-        const { editPost, removePost, votePost, comments, redirect, isModalRemove } = this.props;
-        const { post, modalIsOpen, modalIsOpenComment, comment } = this.state;
+        const { editPost, removePost, votePost, comments, redirect, isModalRemove, modalIsOpenComment } = this.props;
+        const { post, modalIsOpen, comment } = this.state;
         
         //Responsavel por fazer o redirect quando for deletado o post
         if(redirect) {
@@ -161,7 +172,7 @@ class PostDetail extends Component {
                                 <Comments 
                                     key={comment.id} 
                                     comment={comment}
-                                    editComment={this.editComment}
+                                    editComment={this.openEditComment}
                                     removeComment={this.removeComment}
                                 />)}
                             <div className="btn-new-comment">
@@ -204,14 +215,17 @@ class PostDetail extends Component {
 const mapStateToProps = ({ commentReducer, postReducer }) => ({
     comments: commentReducer.comments,
     isModalRemove: postReducer.isModalRemove,
-    redirect: postReducer.redirect
+    redirect: postReducer.redirect,
+    modalIsOpenComment: commentReducer.modalIsOpenComment
 })
 
 const mapDispatchToProps = dispatch => ({
     fetchComments: (id) => dispatch(fetchComments(id)),
     createComment: (comment, parentId) => dispatch(createComment(comment, parentId)),
     removeComment: (comment) => dispatch(removeComment(comment)),
-    openModalRemoveCommentRedux: () => dispatch(openModalRemoveCommentRedux())
+    openModalRemoveCommentRedux: () => dispatch(openModalRemoveCommentRedux()),
+    openModalCommentRedux: () => dispatch(openModalCommentRedux()),
+    updateComment: (comment) => dispatch(updateComment(comment))
 })
 
 export default connect (mapStateToProps, mapDispatchToProps)(PostDetail);

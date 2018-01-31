@@ -6,7 +6,7 @@ import {
     GET_ALL_COMMENTS
 } from '../actions/';
 import { voteScorePost } from '../actions/PostsAction';
-import { removeObjectInArrayById } from '../shared/utils/array';
+import { removeObjectInArrayById, updateObjectInArrayById } from '../shared/utils/array';
 
 const initialPostsState = {
     posts: [],
@@ -23,22 +23,46 @@ function postReducer  (state = initialPostsState, action) {
                 ...state,
                 posts: payload
             }
+        
         case 'CREATE_POST':
             return {
                 ...state,
-                posts: state.posts.concat(post)
+                posts: state.posts.concat(post),
+                modalIsOpen: !state.modalIsOpen
             }
+    
+        case 'UPDATE_POST' :
+            return updatePost(state, post)
+
+        case 'OPEN_MODAL_POST':
+            return {
+                ...state,
+                modalIsOpen: !state.modalIsOpen
+            }
+        
         case 'REMOVE_POST':
             return removePost(state, post.id)
+        
         case 'VOTE_SCORE_POST':
             return addVotePost(state, post, post.voteScore)
+        
         case 'OPEN_MODAL_REMOVE' :
             return {
                 ...state,
-                isModalRemove: true
+                isModalRemove: !state.isModalRemove
             }
+        
         default :
             return state;
+    }
+}
+
+//Metodo responsavel por atualizar o post da lista
+const updatePost = (state, post) => {
+    return {
+        ...state,
+        posts: updateObjectInArrayById(state.posts, post),
+        modalIsOpen: !state.modalIsOpen
     }
 }
 
@@ -89,7 +113,8 @@ const addVotePost = (state, post, voteScore) => {
 const initialCommentState = {
     comments: [],
     modalIsOpen: false,
-    isModalRemove: false
+    isModalRemove: false,
+    modalIsOpenComment: false
 }
 
 
@@ -101,23 +126,47 @@ function commentReducer (state = initialCommentState, action) {
                     ...state,
                     comments: action.payload
                 }
+        
         case 'CREATE_COMMENT' :
             return {
                 ...state,
-                comments: state.comments.concat(comment)
+                comments: state.comments.concat(comment),
+                modalIsOpenComment: !state.modalIsOpenComment
             }
+        
+        case 'UPDATE_COMMENT' :
+            return updateComment(state, comment)
+
         case 'REMOVE_COMMENT' :
             return removeComment(state, commentId)
+        
         case 'VOTE_SCORE_COMMENT' :
             return addVote(state, comment, voteScore)
-            
+        
+        case 'OPEN_MODAL_COMMENT':
+            return {
+                ...state,
+                modalIsOpenComment: !state.modalIsOpenComment
+            }
+        
         case 'OPEN_MODAL_REMOVE' :
             return {
                     ...state,
                     isModalRemove: true
             }
+        
         default :
             return state;
+    }
+}
+
+
+//Metodo responsavel por atualizar o comment da lista
+const updateComment = (state, comment) => {
+    return {
+        ...state,
+        comments: updateObjectInArrayById(state.comments, comment),
+        modalIsOpenComment: !state.modalIsOpenComment
     }
 }
 

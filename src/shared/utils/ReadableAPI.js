@@ -53,7 +53,7 @@ export const createPost = (post) => {
   )
 }  
 
-//Metodo responsável por adicionar um novo post
+//Metodo responsável por atualizar um post
 export const updatePost = (post) => {
   return (
     fetch(`${url}/posts/${post.id}`,{ method: 'PUT',  headers: { ...headers, 'Content-Type': 'application/json'},
@@ -140,6 +140,22 @@ export const createComment = (comment, parentId) => {
   )
 }  
 
+//Metodo responsável por atualizar um comment
+export const updateComment = (comment) => {
+  return (
+    fetch(`${url}/comments/${comment.id}`,{ method: 'PUT',  headers: { ...headers, 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: comment.id,
+        timestamp: Date.now(),
+        body: comment.body,
+        author: comment.author, 
+        parentId: comment.parentId
+      })
+    })
+      .then(res => res.json())
+      .catch(err => console.log(err))
+  )
+} 
 
 //Metodo responsável por fazer o voteScore
 export const voteScoreComment = (vote) => {

@@ -17,7 +17,8 @@ class Comments extends Component {
     //Metodo responsavel por abrir o modalRemove
     openModalRemove = (comment) => {
         this.setState({
-            comment
+            comment,
+            isModalRemove: true
         });
         this.props.openModalRemoveCommentRedux();
     }
@@ -46,7 +47,7 @@ class Comments extends Component {
     }
 
     render () {
-        const { comment, editComment, removeComment, isModalRemove } = this.props;
+        const { comment, editComment, removeComment } = this.props;
         return (
             <div className="card">
                 <div className="card-block">
@@ -63,10 +64,10 @@ class Comments extends Component {
                 </div>
                 <div>
                     <ModalRemove 
-                        isOpen={isModalRemove} 
+                        isOpen={this.state.isModalRemove} 
                         closeModalRemove={this.closeModalRemove} 
                         registro={comment} 
-                        removerRegistro={this.remove}
+                        removerRegistro={removeComment}
                     />
                 </div>
             </div>

@@ -7,7 +7,15 @@ import { connect } from 'react-redux';
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
 import ModalRemove from '../../shared/ModalRemove';
-import { createPost, fetchPosts, removePost, updatePost, voteScorePost } from '../../actions/PostsAction';
+import { 
+    createPost, 
+    fetchPosts, 
+    removePost, 
+    updatePost, 
+    voteScorePost, 
+    openModalRemovePostRedux,
+    openModalPostRedux 
+} from '../../actions/PostsAction';
 
 class Posts extends Component {
     constructor(props) {
@@ -49,22 +57,6 @@ class Posts extends Component {
         });
     }
 
-    //Metodo responsavel por abrir o modalRemove
-    openModalRemove = (post) => {
-        this.setState({
-            isModalRemove: !this.state.isModalRemove,
-            post
-        });
-    }
-
-    //Responsavel por fechar o modalRemove
-    closeModalRemove = () => {
-        this.setState({
-            modalIsOpen: false,
-            isModalRemove: false
-        });
-    }
-
     //Responsavel por atualizar os input
     handleChange = (e) => {
         e.preventDefault();
@@ -80,8 +72,7 @@ class Posts extends Component {
     insertPost = (e) => {
         e.preventDefault();
         const values = serializeForm(e.target, { hash: true });
-        const { post } = this.state;
-        if (post.id) {
+        if (values.id) {
             this.editPost(values);
         } else {
             //inserir no servidor aqui
@@ -91,12 +82,7 @@ class Posts extends Component {
 
     //Responsavel por editar o post
     editPost = (post) => {
-        this.setState({
-            post: {
-                ...post
-            }
-        })
-        this.props.updatePost(this.state.post);
+        this.props.updatePost(post);
     }
 
     //Responsavel por abrir o dialog com os input setado
@@ -105,31 +91,21 @@ class Posts extends Component {
             post: {
                 ...post
             },
-            modalIsOpen: true
         });
+        this.props.openModalPostRedux();
     }
 
     //Responsavel por remover o post
     removePost = (post) => {
         this.props.removePost(post.id);
     }
-
-    //Metodo responsavel por vote score do post
-    votePost = (post, option) => {
-        const vote = {
-            post,
-            option
-        }
-        this.props.voteScorePost(vote);
-    }
-
     render () {
-        const { post, modalIsOpen } = this.state;
-        const { posts, isModalRemove } = this.props;
+        const { post } = this.state;
+        const { posts, isModalRemove, modalIsOpen, openModalPostRedux } = this.props;
         return (
             <div>
                 <div className="open-modal-post">
-                    <button onClick={this.openModal}>+</button>
+                    <button onClick={openModalPostRedux}>+</button>
                 </div>
                 <div>
                     {posts.map((post) => {
@@ -147,7 +123,7 @@ class Posts extends Component {
                 <div>
                     <ModalPost 
                         isOpen={modalIsOpen}
-                        closeModal={this.closeModal}
+                        closeModal={openModalPostRedux}
                         post={post}
                         insertPost={this.insertPost} 
                         handleChange={this.handleChange}
@@ -156,7 +132,7 @@ class Posts extends Component {
                 <div>
                     <ModalRemove 
                         isOpen={isModalRemove} 
-                        closeModalRemove={this.closeModalRemove} 
+                        closeModalRemove={openModalRemovePostRedux} 
                         registro={post} 
                         removerRegistro={this.removePost}
                     />
@@ -168,7 +144,8 @@ class Posts extends Component {
 
 const mapStateToProps = ({ postReducer }) => ({
     posts: postReducer.posts,
-    isModalRemove: postReducer.isModalRemove
+    isModalRemove: postReducer.isModalRemove,
+    modalIsOpen: postReducer.modalIsOpen
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -177,6 +154,8 @@ const mapDispatchToProps = dispatch => ({
     removePost: (id) => dispatch(removePost(id)),
     updatePost: (post) => dispatch(updatePost(post)),
     voteScorePost: (vote) => dispatch(voteScorePost(vote)), 
+    openModalRemovePostRedux: () => dispatch(openModalRemovePostRedux()),
+    openModalPostRedux: () => dispatch(openModalPostRedux())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

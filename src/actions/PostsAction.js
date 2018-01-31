@@ -61,21 +61,23 @@ export const removePostRedux = (res) => {
 
 //Responsavel por remover o post
 export const removePost = (id) => dispatch => {
-    console.log('remove post')
     ReadableAPI.removePost(id)
         .then(res => dispatch(removePostRedux(res)))
         .catch(err => console.log(err));
 }
 
+//Responsavel por setar a atualização do post no redux
+export const updatePostRedux = (post) => {
+    return {
+        type: 'UPDATE_POST',
+        post
+    }            
+}
+
 //Responsavel por atualizar o post
 export const updatePost = (post) => dispatch => {
     ReadableAPI.updatePost(post)
-        .then(res => {
-            return {
-                type: 'CREATE_POST',
-                payload: post
-            }            
-        })
+        .then(res => dispatch(updatePostRedux(res)))
         .catch(err => console.log(err));
 }
 
@@ -84,5 +86,12 @@ export const openModalRemovePostRedux = () => {
     return {
         type: 'OPEN_MODAL_REMOVE',
         payload: true
+    }
+}
+
+//Responsavel por abrir o modal do post
+export const openModalPostRedux = () => {
+    return {
+        type: 'OPEN_MODAL_POST'
     }
 }
