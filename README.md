@@ -13,6 +13,6 @@ Aplicativo web de conteúdo e comentários. Permitirá que os usuários postem c
 * Manter a janela de comandos aberta.
 
 ## Instalando e iniciando o aplicativo Readable
-* Abrir uma nova janela de comandos e entrar na pasta front-end `cd front-end`
+* Abrir uma nova janela de comandos e entrar na pasta readable `cd readable`
 * Instalar as dependências `npm install`
 * Iniciar o aplicativo `npm start`
