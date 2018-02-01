@@ -7,12 +7,12 @@ Aplicativo web de conteúdo e comentários. Permitirá que os usuários postem c
 
 
 ## Instalando e iniciando o servidor de testes
-* Entrar na pasta api-server `cd api-server`
+* Entrar na pasta back-end e depois na pasta api-server `cd api-server`
 * Instalar as dependências `npm install`
 * Iniciar o servidor `npm start`
 * Manter a janela de comandos aberta.
 
 ## Instalando e iniciando o aplicativo Readable
-* Abrir uma nova janela de comandos e entrar na pasta readable `cd readable`
+* Abrir uma nova janela de comandos e entrar na pasta front-end `cd front-end`
 * Instalar as dependências `npm install`
 * Iniciar o aplicativo `npm start`
