@@ -17,7 +17,8 @@ const initialPostsState = {
     posts: [],
     redirect: false,
     modalIsOpen: false,
-    isModalRemove: false
+    isModalRemove: false,
+    loading: true
 }
 
 function postReducer  (state = initialPostsState, action) {
@@ -26,7 +27,8 @@ function postReducer  (state = initialPostsState, action) {
         case 'GET_ALL_POST':
             return {
                 ...state,
-                posts: payload
+                posts: payload,
+                loading: false
             }
             
         case 'CREATE_POST':

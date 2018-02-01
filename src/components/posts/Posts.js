@@ -3,6 +3,7 @@ import * as ReadableAPI  from '../../shared/utils/ReadableAPI';
 import Modal from 'react-modal';
 import serializeForm from 'form-serialize';
 import { connect } from 'react-redux';
+import ReactLoading from 'react-loading';
 
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
@@ -33,7 +34,19 @@ class Posts extends Component {
             modalIsOpen: false,
             isModalRemove: false,
             categories: [],
-            category: ''
+            category: '',
+            filters: [
+                {
+                    name: 'TopVoteScore'
+                },
+                {
+                    name: 'DownVoteScore'
+                },
+                {
+                    name: 'Date'
+                }
+            ],
+            filter: ''
         }
     }
 
@@ -50,13 +63,33 @@ class Posts extends Component {
             .then(categories => this.setState({ categories: categories.categories }));
     }
 
-    //Responsavel por alterar as category do action creator
+    //Responsavel por alterar as category do state
     setarCategory = (e) => {
         e.preventDefault();
         this.setState({
             category: e.target.value
         })
         this.props.fetchPostsByCategory(e.target.value);
+    } 
+
+    
+    //Responsavel por alterar os filtros
+    setarFilter = (e) => {
+        const { posts } = this.props;
+        e.preventDefault();
+        let filter = e.target.value;
+        this.setState({
+            filter
+        })
+        
+        //Responsavel por fazer o filtro no array do post
+        if(filter === 'Date') {
+            posts.sort(function(a,b) {return (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0);} );
+        } else if (filter === 'DownVoteScore') {
+            posts.sort(function(a,b) {return (a.voteScore > b.voteScore) ? 1 : ((b.voteScore > a.voteScore) ? -1 : 0);} );
+        } else {
+            posts.sort(function(a,b) {return (a.voteScore < b.voteScore) ? 1 : ((b.voteScore < a.voteScore) ? -1 : 0);} );
+        }
     } 
 
     //Responsavel por atualizar os input
@@ -117,47 +150,71 @@ class Posts extends Component {
     }
 
     render () {
-        const { post, categories, category } = this.state;
-        const { posts, isModalRemove, modalIsOpen, openModalPostRedux } = this.props;
+        const { post, categories, category, filter, filters } = this.state;
+        const { posts, isModalRemove, modalIsOpen, openModalPostRedux, loading } = this.props;
+
         return (
             <div>
-                <div>
-                    <form>
-                        <select id="category" name="category" value={category} onChange={this.setarCategory} required>
-                        <option value=''>All Posts</option>
-                            {categories.map((category) => {
+                <div className="row">
+                    <div>
+                        <form>
+                            <div>
+                                <label htmlFor="category" class="mr-sm-2">Category</label>
+                                <select id="category" name="category" className="custom-select mb-2 mr-sm-2 mb-sm-0" value={category} onChange={this.setarCategory} required>
+                                <option value=''>All Posts</option>
+                                    {categories.map((category) => {
+                                        return (
+                                            <option key={category.name} value={category.name}>{category.name}</option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                            <br />
+                            <div>
+                                <label htmlFor="filter" class="mr-sm-2">Filter</label>
+                                <select id="filter" name="filter" className="custom-select mb-2 mr-sm-2 mb-sm-0" value={filter} onChange={this.setarFilter} required>
+                                <option value=''>Padrão VoteScore</option>
+                                    {filters.map((filter) => {
+                                        return (
+                                            <option key={filter.name} value={filter.name}>{filter.name}</option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {loading
+                    ? <ReactLoading delay={200} type='spin' color='#222' className='loading' />
+                :
+                    <div>
+                        <div className="open-modal-post">
+                            <button onClick={openModalPostRedux}>+</button>
+                        </div>
+                        <div>
+                            {posts.map((post) => {
                                 return (
-                                    <option key={category.name} value={category.name}>{category.name}</option>
+                                    <PostItem 
+                                        key={post.id}
+                                        post={post}
+                                        editPost={this.openEditPost}
+                                        removePost={this.removePost} 
+                                    />
                                 );
                             })}
-                        </select>
-                    </form>
-                </div>
-                <div className="open-modal-post">
-                    <button onClick={openModalPostRedux}>+</button>
-                </div>
-                <div>
-                    {posts.map((post) => {
-                        return (
-                            <PostItem 
-                                key={post.id}
+                        </div>
+                        <div>
+                            <ModalPost 
+                                isOpen={modalIsOpen}
+                                closeModal={this.changeOpenModal}
                                 post={post}
-                                editPost={this.openEditPost}
-                                removePost={this.removePost} 
+                                insertPost={this.insertPost} 
+                                handleChange={this.handleChange}
+                                categories={categories}
                             />
-                        );
-                    })}
-                </div>
-                <div>
-                    <ModalPost 
-                        isOpen={modalIsOpen}
-                        closeModal={this.changeOpenModal}
-                        post={post}
-                        insertPost={this.insertPost} 
-                        handleChange={this.handleChange}
-                        categories={categories}
-                    />
-                </div>
+                        </div>
+                    </div>
+                }
             </div>
         );
     }
@@ -169,6 +226,7 @@ const mapStateToProps = ({ postReducer, categoryReducer }) => ({
     modalIsOpen: postReducer.modalIsOpen,
     category: categoryReducer.category,
     categories: categoryReducer.categories,
+    loading: postReducer.loading
 })
 
 const mapDispatchToProps = dispatch => ({
