@@ -51,6 +51,10 @@ body {
   padding: 50px;
 }
 
+.card-page-error {
+  text-align: center
+}
+
 .navBar {
   background: #1976D2;
 }

@@ -6,22 +6,23 @@ import {
 } from './index';
 
 //Responsavel por setar no redux todos os posts
-export const getAll = (posts) => {  
+export const setPostsRedux = (posts) => {  
     return {
         type: 'GET_ALL_POST',
         payload: posts
     }
 }
 
+export const fetchAllPosts = () => dispatch => {
+    ReadableAPI.getAllPosts()
+        .then(res => dispatch(setPostsRedux(res)));    
+}
+
 //Responsavel por buscar os posts da api por categoria ou sem
 export const fetchPostsByCategory = (category) => dispatch => {
-    if(category) {
-        ReadableAPI.getPostsByCategory(category)
-            .then(res => dispatch(getAll(res)))
-    } else {
-        ReadableAPI.getAllPosts()
-            .then(res => dispatch(getAll(res)));    
-    }
+    console.log(category);
+    ReadableAPI.getPostsByCategory(category)
+        .then(res => dispatch(setPostsRedux(res))) 
 }
 
 //Responsavel por setar o novo post no redux
@@ -66,7 +67,6 @@ export const removePostRedux = (res) => {
 
 //Responsavel por remover o post
 export const removePost = (id) => dispatch => {
-    console.log('entrou')
     ReadableAPI.removePost(id)
         .then(res => dispatch(removePostRedux(res)))
         .catch(err => console.log(err));
@@ -99,5 +99,13 @@ export const openModalRemovePostRedux = () => {
 export const openModalPostRedux = () => {
     return {
         type: 'OPEN_MODAL_POST'
+    }
+}
+
+//Responsavel por chamar a pagina de post não encontrado
+export const pageNotFound = () => {
+    return {
+        type: 'PAGE_NOTFOUND',
+        pageNotFound: true
     }
 }

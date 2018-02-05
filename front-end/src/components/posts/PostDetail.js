@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
+import Redirect from 'react-router-dom/Redirect';
 
-import { voteScorePost, removePost, openModalPostRedux, updatePost } from '../../actions/PostsAction'; 
+import { voteScorePost, removePost, openModalPostRedux, updatePost, pageNotFound } from '../../actions/PostsAction'; 
 import { 
     fetchComments, 
     createComment, 
@@ -17,7 +18,6 @@ import {
 } from '../../actions/CommentsAction';
 import * as ReadableAPI from '../../shared/utils/ReadableAPI';
 import ModalPost from './ModalPost';
-import Redirect from 'react-router-dom/Redirect';
 
 class PostDetail extends Component {
     constructor(props) {
@@ -41,11 +41,12 @@ class PostDetail extends Component {
             isModalRemove: false,
             modalIsOpenComment: false,
             categories: [],
-            category: ''
+            category: '',
+            error: ''
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         Modal.setAppElement('body');
         this.buscarDetail();
         this.getAllCategories();
@@ -53,14 +54,21 @@ class PostDetail extends Component {
     
     //Responsavel por buscar o detail do post
     buscarDetail = () => {
-        let id = this.props.match.params.id;
+        let id = this.props.match.params.post_id;
+        
         ReadableAPI.getDetail(id)
             .then((post) => {
-                return (
-                    this.setState({ post }), 
-                    this.buscarComentario()
-                )
-            });
+                if(post.error) {
+                    return (
+                        this.setState({ error: post.error })
+                    )
+                } else {
+                    return (
+                        this.setState({ post }), 
+                        this.buscarComentario()
+                    )
+                }
+            })
     }
 
     //Responsavel por buscar todos as categorias
@@ -167,13 +175,17 @@ class PostDetail extends Component {
             redirect, 
             isModalRemove, 
             modalIsOpenComment, 
-            modalIsOpen
+            modalIsOpen,
+            pageNotFound
         } = this.props;
-        const { post, comment, categories } = this.state;
+        const { post, comment, categories, error } = this.state;
         
+        if(error) {
+            return <Redirect to='/error' />
+        }
         //Responsavel por fazer o redirect quando for deletado o post
-        if(redirect) {
-            return <Redirect to='/posts' />
+        else if(redirect) {
+            return <Redirect to='/' />
         }
         return (
             <div>
@@ -181,7 +193,7 @@ class PostDetail extends Component {
                     <div className="card">
                         <div className="card-block">
                             <div className="btn-card-post">
-                                <Link to="/posts" className="btn btn-primary"><i className="glyphicon glyphicon-arrow-left"></i></Link>
+                                <Link to="/" className="btn btn-primary"><i className="glyphicon glyphicon-arrow-left"></i></Link>
                                 <a href="#" className="btn btn-info" onClick={() => this.openEditPost(post)}><i className="glyphicon glyphicon-edit"></i></a>
                                 <a href="#" className="btn btn-danger" onClick={() => removePost(post.id)}><i className="glyphicon glyphicon-trash"></i></a>
                             </div>
@@ -236,7 +248,8 @@ const mapStateToProps = ({ commentReducer, postReducer }) => ({
     isModalRemove: postReducer.isModalRemove,
     redirect: postReducer.redirect,
     modalIsOpenComment: commentReducer.modalIsOpenComment,
-    modalIsOpen: postReducer.modalIsOpen
+    modalIsOpen: postReducer.modalIsOpen,
+    pageNotFound: postReducer.pageNotFound
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -249,7 +262,8 @@ const mapDispatchToProps = dispatch => ({
     removePost: (post) => dispatch(removePost(post)),
     openModalPostRedux: () => dispatch(openModalPostRedux()),
     updatePost: (post) => dispatch(updatePost(post)),
-    voteScorePost: (vote) => dispatch(voteScorePost(vote))
+    voteScorePost: (vote) => dispatch(voteScorePost(vote)),
+    pageNotFound: () => dispatch(pageNotFound())
 })
 
 export default connect (mapStateToProps, mapDispatchToProps)(PostDetail);

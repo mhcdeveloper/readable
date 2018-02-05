@@ -46,12 +46,11 @@ const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange, categor
                                     <div className="col-md-12">
                                     <label htmlFor="category">Categories</label>
                                     <select className="form-control" id="category" name="category" value={post.category} onChange={handleChange.bind(this)} required>
-                                        <option value=''>All Posts</option>
-                                            {categories.map((category) => {
-                                                return (
-                                                    <option key={category.name} value={category.name}>{category.name}</option>
-                                                );
-                                            })}
+                                        {categories.map((category) => {
+                                            return (
+                                                <option key={category.name} value={category.name}>{category.name}</option>
+                                            );
+                                        })}
                                     </select>
                                     </div>
                                 </div>

@@ -19,7 +19,7 @@ class PostItem extends Component {
     }
 
     render () {
-        const { post, editPost, removePost } = this.props;
+        const { post, editPost, removePost, category } = this.props;
         return (
             <div>
                 <div className="card">
@@ -36,7 +36,7 @@ class PostItem extends Component {
                         <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 1)}><i className="glyphicon glyphicon-thumbs-up"></i></a>
                         <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 0)}><i className="glyphicon glyphicon-thumbs-down"></i></a>
                         <div className="btn-card-post">
-                            <Link to={`/posts/detail/${post.id}`} className="btn btn-primary"><i className="glyphicon glyphicon-eye-open"></i></Link>
+                            <Link to={`/${category}/${post.id}`} className="btn btn-primary"><i className="glyphicon glyphicon-eye-open"></i></Link>
                             <a href="#" className="btn btn-info" onClick={() => editPost(post)}><i className="glyphicon glyphicon-edit"></i></a>
                             <a href="#" className="btn btn-danger" onClick={() => removePost(post)}><i className="glyphicon glyphicon-trash"></i></a>
                         </div>

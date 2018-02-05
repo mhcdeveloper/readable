@@ -18,11 +18,12 @@ const initialPostsState = {
     redirect: false,
     modalIsOpen: false,
     isModalRemove: false,
-    loading: true
+    loading: true,
+    pageNotFound: false
 }
 
 function postReducer  (state = initialPostsState, action) {
-    const { post, payload, postDetail } = action;
+    const { post, payload, postDetail, pageNotFound } = action;
     switch (action.type) {
         case 'GET_ALL_POST':
             return {
@@ -59,6 +60,12 @@ function postReducer  (state = initialPostsState, action) {
                 isModalRemove: !state.isModalRemove
             }
         
+        case 'POST_NOT_FOUND' :
+            return {
+                ...state,
+                pageNotFound
+            }
+
         default :
             return state;
     }

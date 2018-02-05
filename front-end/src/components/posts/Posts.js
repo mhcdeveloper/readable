@@ -4,6 +4,8 @@ import Modal from 'react-modal';
 import serializeForm from 'form-serialize';
 import { connect } from 'react-redux';
 import ReactLoading from 'react-loading';
+import Redirect from 'react-router-dom/Redirect';
+import { Link } from 'react-router-dom';
 
 import PostItem from './PostItem';
 import ModalPost from './ModalPost';
@@ -17,6 +19,7 @@ import {
     openModalPostRedux 
 } from '../../actions/PostsAction';
 import { fetchCategories, setCategory } from '../../actions/CategoryAction';
+import { fetchAllPosts } from '../../actions/PostsAction';
 
 class Posts extends Component {
     constructor(props) {
@@ -33,8 +36,6 @@ class Posts extends Component {
             posts: [],
             modalIsOpen: false,
             isModalRemove: false,
-            categories: [],
-            category: '',
             filters: [
                 {
                     name: 'TopVoteScore'
@@ -50,26 +51,22 @@ class Posts extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         Modal.setAppElement('body');
         this.getAllCategories();
-        let category = '';
-        this.props.fetchPostsByCategory(category);
+        this.props.fetchAllPosts();
+        //this.props.fetchPostsByCategory(category);
     }
 
     //Responsavel por buscar todos as categorias
     getAllCategories = () => {
-        ReadableAPI.getAllCategories()
-            .then(categories => this.setState({ categories: categories.categories }));
+        this.props.fetchCategories();
     }
 
     //Responsavel por alterar as category do state
     setarCategory = (e) => {
         e.preventDefault();
-        this.setState({
-            category: e.target.value
-        })
-        this.props.fetchPostsByCategory(e.target.value);
+        this.props.setCategory(e.target.value);
     } 
 
     
@@ -150,8 +147,14 @@ class Posts extends Component {
     }
 
     render () {
-        const { post, categories, category, filter, filters } = this.state;
-        const { posts, isModalRemove, modalIsOpen, openModalPostRedux, loading } = this.props;
+        const { post, filter, filters } = this.state;
+        const { posts, categories, category, isModalRemove, modalIsOpen, openModalPostRedux, loading } = this.props;
+
+        if(category){
+            return (
+                <Redirect to={`/${category}`} />
+            )
+        }
 
         return (
             <div>
@@ -159,7 +162,7 @@ class Posts extends Component {
                     <div>
                         <form>
                             <div>
-                                <label htmlFor="category" class="mr-sm-2">Category</label>
+                                <label htmlFor="category" className="mr-sm-2">Category</label>
                                 <select id="category" name="category" className="custom-select mb-2 mr-sm-2 mb-sm-0" value={category} onChange={this.setarCategory} required>
                                 <option value=''>All Posts</option>
                                     {categories.map((category) => {
@@ -171,7 +174,7 @@ class Posts extends Component {
                             </div>
                             <br />
                             <div>
-                                <label htmlFor="filter" class="mr-sm-2">Filter</label>
+                                <label htmlFor="filter" className="mr-sm-2">Filter</label>
                                 <select id="filter" name="filter" className="custom-select mb-2 mr-sm-2 mb-sm-0" value={filter} onChange={this.setarFilter} required>
                                 <option value=''>Padrão VoteScore</option>
                                     {filters.map((filter) => {
@@ -199,6 +202,7 @@ class Posts extends Component {
                                         post={post}
                                         editPost={this.openEditPost}
                                         removePost={this.removePost} 
+                                        category={category}
                                     />
                                 );
                             })}
@@ -226,7 +230,8 @@ const mapStateToProps = ({ postReducer, categoryReducer }) => ({
     modalIsOpen: postReducer.modalIsOpen,
     category: categoryReducer.category,
     categories: categoryReducer.categories,
-    loading: postReducer.loading
+    loading: postReducer.loading,
+    category: categoryReducer.category
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -237,7 +242,8 @@ const mapDispatchToProps = dispatch => ({
     openModalPostRedux: () => dispatch(openModalPostRedux()),
     fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category)),
     fetchCategories: (categories) => dispatch(fetchCategories(categories)),
-    setCategory: (category) => dispatch(setCategory(category))
+    setCategory: (category) => dispatch(setCategory(category)),
+    fetchAllPosts: () => dispatch(fetchAllPosts())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

@@ -47,7 +47,7 @@ export const getDetail = (id) => {
   return (
     fetch(`${url}/posts/${id}`, { headers })
       .then(res => res.json())
-      .catch(err => console.log(err))
+      .catch(err => err.json())
   )
 }
   
