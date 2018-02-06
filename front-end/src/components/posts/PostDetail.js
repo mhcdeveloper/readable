@@ -42,7 +42,7 @@ class PostDetail extends Component {
             modalIsOpenComment: false,
             categories: [],
             category: '',
-            error: ''
+            pageNotFound: false
         }
     }
 
@@ -55,13 +55,10 @@ class PostDetail extends Component {
     //Responsavel por buscar o detail do post
     buscarDetail = () => {
         let id = this.props.match.params.post_id;
-        
         ReadableAPI.getDetail(id)
             .then((post) => {
                 if(post.error) {
-                    return (
-                        this.setState({ error: post.error })
-                    )
+                    this.setState({ pageNotFound: true });
                 } else {
                     return (
                         this.setState({ post }), 
@@ -175,12 +172,11 @@ class PostDetail extends Component {
             redirect, 
             isModalRemove, 
             modalIsOpenComment, 
-            modalIsOpen,
-            pageNotFound
+            modalIsOpen
         } = this.props;
-        const { post, comment, categories, error } = this.state;
-        
-        if(error) {
+        const { post, comment, categories, pageNotFound } = this.state;
+
+        if(pageNotFound === true) {
             return <Redirect to='/error' />
         }
         //Responsavel por fazer o redirect quando for deletado o post

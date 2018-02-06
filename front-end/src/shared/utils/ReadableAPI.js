@@ -24,7 +24,6 @@ const headers = {
 
 //Buscar os posta por categoria
 export const getPostsByCategory = (category) => {
-  console.log(category);
   return (
     fetch(`${url}/${category}/posts`, {headers})
       .then(res => res.json())

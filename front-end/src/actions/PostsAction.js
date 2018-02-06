@@ -6,10 +6,11 @@ import {
 } from './index';
 
 //Responsavel por setar no redux todos os posts
-export const setPostsRedux = (posts) => {  
+export const setPostsRedux = (posts, category) => {  
     return {
         type: 'GET_ALL_POST',
-        payload: posts
+        payload: posts,
+        category
     }
 }
 
@@ -20,9 +21,8 @@ export const fetchAllPosts = () => dispatch => {
 
 //Responsavel por buscar os posts da api por categoria ou sem
 export const fetchPostsByCategory = (category) => dispatch => {
-    console.log(category);
     ReadableAPI.getPostsByCategory(category)
-        .then(res => dispatch(setPostsRedux(res))) 
+        .then(res => dispatch(setPostsRedux(res, category))) 
 }
 
 //Responsavel por setar o novo post no redux
@@ -105,7 +105,7 @@ export const openModalPostRedux = () => {
 //Responsavel por chamar a pagina de post não encontrado
 export const pageNotFound = () => {
     return {
-        type: 'PAGE_NOTFOUND',
+        type: 'POST_NOT_FOUND',
         pageNotFound: true
     }
 }

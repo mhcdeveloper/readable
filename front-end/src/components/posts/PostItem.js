@@ -33,12 +33,12 @@ class PostItem extends Component {
                             <small className="text-muted">{post.commentCount} <i className="glyphicon glyphicon-comment"></i> </small>
                             <small className="text-muted">{post.voteScore} <i className="glyphicon glyphicon-thumbs-up"></i></small>
                         </p>
-                        <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 1)}><i className="glyphicon glyphicon-thumbs-up"></i></a>
-                        <a href="#" className="btn btn-primary" onClick={() => this.votePost(post, 0)}><i className="glyphicon glyphicon-thumbs-down"></i></a>
+                        <button href="#" className="btn btn-primary" onClick={() => this.votePost(post, 1)}><i className="glyphicon glyphicon-thumbs-up"></i></button>
+                        <button href="#" className="btn btn-primary" onClick={() => this.votePost(post, 0)}><i className="glyphicon glyphicon-thumbs-down"></i></button>
                         <div className="btn-card-post">
                             <Link to={`/${category}/${post.id}`} className="btn btn-primary"><i className="glyphicon glyphicon-eye-open"></i></Link>
-                            <a href="#" className="btn btn-info" onClick={() => editPost(post)}><i className="glyphicon glyphicon-edit"></i></a>
-                            <a href="#" className="btn btn-danger" onClick={() => removePost(post)}><i className="glyphicon glyphicon-trash"></i></a>
+                            <button href="#" className="btn btn-info" onClick={() => editPost(post)}><i className="glyphicon glyphicon-edit"></i></button>
+                            <button href="#" className="btn btn-danger" onClick={() => removePost(post)}><i className="glyphicon glyphicon-trash"></i></button>
                         </div>
                     </div>
                 </div>
@@ -48,8 +48,12 @@ class PostItem extends Component {
     }
 }
 
+const mapStateToProps = ({ postReducer }) => ({
+    category: postReducer.category
+})
+
 const mapDispatchToProps = dispatch => ({
     voteScorePost: (vote) => dispatch(voteScorePost(vote))
 })
 
-export default connect(null, mapDispatchToProps)(PostItem);
+export default connect(mapStateToProps, mapDispatchToProps)(PostItem);

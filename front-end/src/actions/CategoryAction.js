@@ -17,6 +17,6 @@ export const fetchCategories = () => dispatch => {
 export const setCategory= (category) => {
     return {
         type: 'SET_CATEGORY',
-        category: category
+        category
     }
 }

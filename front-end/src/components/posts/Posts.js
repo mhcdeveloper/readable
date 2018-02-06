@@ -154,13 +154,13 @@ class Posts extends Component {
             return (
                 <Redirect to={`/${category}`} />
             )
-        }
+        } 
 
         return (
             <div>
                 <div className="row">
                     <div>
-                        <form>
+                        <form>                            
                             <div>
                                 <label htmlFor="category" className="mr-sm-2">Category</label>
                                 <select id="category" name="category" className="custom-select mb-2 mr-sm-2 mb-sm-0" value={category} onChange={this.setarCategory} required>
@@ -201,8 +201,7 @@ class Posts extends Component {
                                         key={post.id}
                                         post={post}
                                         editPost={this.openEditPost}
-                                        removePost={this.removePost} 
-                                        category={category}
+                                        removePost={this.removePost}
                                     />
                                 );
                             })}
@@ -228,10 +227,9 @@ const mapStateToProps = ({ postReducer, categoryReducer }) => ({
     posts: postReducer.posts,
     isModalRemove: postReducer.isModalRemove,
     modalIsOpen: postReducer.modalIsOpen,
-    category: categoryReducer.category,
     categories: categoryReducer.categories,
     loading: postReducer.loading,
-    category: categoryReducer.category
+    category: postReducer.category
 })
 
 const mapDispatchToProps = dispatch => ({

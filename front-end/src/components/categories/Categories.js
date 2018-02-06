@@ -142,8 +142,8 @@ class Categories extends Component {
                                     })}
                                 </select>
                             </div>
-                        </form>
                         <Link to="/" className="btn btn-primary"><i className="glyphicon glyphicon-arrow-left"></i></Link>
+                        </form>
                     </div>
                 </div>
                 {loading

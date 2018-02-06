@@ -19,17 +19,19 @@ const initialPostsState = {
     modalIsOpen: false,
     isModalRemove: false,
     loading: true,
-    pageNotFound: false
+    pageNotFound: false,
+    category: ''
 }
 
 function postReducer  (state = initialPostsState, action) {
-    const { post, payload, postDetail, pageNotFound } = action;
+    const { post, payload, postDetail, pageNotFound, category } = action;
     switch (action.type) {
         case 'GET_ALL_POST':
             return {
                 ...state,
                 posts: payload,
-                loading: false
+                loading: false,
+                category 
             }
             
         case 'CREATE_POST':
@@ -63,9 +65,15 @@ function postReducer  (state = initialPostsState, action) {
         case 'POST_NOT_FOUND' :
             return {
                 ...state,
-                pageNotFound
+                pageNotFound: true
             }
 
+        case 'SET_CATEGORY' :
+            return {
+                ...state,
+                category
+            }
+        
         default :
             return state;
     }
@@ -210,7 +218,6 @@ const addVote = (state, comment, voteScore) => {
 
 const initialCategoryState = {
     categories: [],
-    category: ''
 }
 
 function categoryReducer (state = initialCategoryState, action) {
@@ -220,12 +227,6 @@ function categoryReducer (state = initialCategoryState, action) {
             return {
                 ...state,
                 categories
-            }
-
-        case 'SET_CATEGORY' :
-            return {
-                ...state,
-                category
             }
 
         default :
