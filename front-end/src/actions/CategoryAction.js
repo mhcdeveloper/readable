@@ -14,9 +14,3 @@ export const fetchCategories = () => dispatch => {
         .then(res => dispatch(getAllCategories(res)));
 }
 
-export const setCategory= (category) => {
-    return {
-        type: 'SET_CATEGORY',
-        category
-    }
-}

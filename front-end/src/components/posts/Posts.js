@@ -16,9 +16,10 @@ import {
     updatePost, 
     voteScorePost, 
     openModalRemovePostRedux,
-    openModalPostRedux 
+    openModalPostRedux,     
+    setCategory
 } from '../../actions/PostsAction';
-import { fetchCategories, setCategory } from '../../actions/CategoryAction';
+import { fetchCategories } from '../../actions/CategoryAction';
 import { fetchAllPosts } from '../../actions/PostsAction';
 
 class Posts extends Component {
@@ -148,14 +149,13 @@ class Posts extends Component {
 
     render () {
         const { post, filter, filters } = this.state;
-        const { posts, categories, category, isModalRemove, modalIsOpen, openModalPostRedux, loading } = this.props;
+        const { posts, categories, category, isModalRemove, modalIsOpen, openModalPostRedux, loadingPosts } = this.props;
 
         if(category){
             return (
                 <Redirect to={`/${category}`} />
             )
         } 
-
         return (
             <div>
                 <div className="row">
@@ -187,7 +187,7 @@ class Posts extends Component {
                         </form>
                     </div>
                 </div>
-                {loading
+                {loadingPosts
                     ? <ReactLoading delay={200} type='spin' color='#222' className='loading' />
                 :
                     <div>
@@ -228,7 +228,7 @@ const mapStateToProps = ({ postReducer, categoryReducer }) => ({
     isModalRemove: postReducer.isModalRemove,
     modalIsOpen: postReducer.modalIsOpen,
     categories: categoryReducer.categories,
-    loading: postReducer.loading,
+    loadingPosts: postReducer.loadingPosts,
     category: postReducer.category
 })
 

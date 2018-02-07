@@ -18,19 +18,19 @@ const initialPostsState = {
     redirect: false,
     modalIsOpen: false,
     isModalRemove: false,
-    loading: true,
-    pageNotFound: false,
+    loadingPosts: true,
+    pageNotFoundDetail: false,
     category: ''
 }
 
 function postReducer  (state = initialPostsState, action) {
-    const { post, payload, postDetail, pageNotFound, category } = action;
+    const { post, payload, postDetail, pageNotFoundDetail, category } = action;
     switch (action.type) {
         case 'GET_ALL_POST':
             return {
                 ...state,
                 posts: payload,
-                loading: false,
+                loadingPosts: false,
                 category 
             }
             
@@ -65,13 +65,14 @@ function postReducer  (state = initialPostsState, action) {
         case 'POST_NOT_FOUND' :
             return {
                 ...state,
-                pageNotFound: true
+                pageNotFoundDetail: true
             }
 
         case 'SET_CATEGORY' :
             return {
                 ...state,
-                category
+                category,
+                postsByCategory: category
             }
         
         default :

@@ -106,6 +106,14 @@ export const openModalPostRedux = () => {
 export const pageNotFound = () => {
     return {
         type: 'POST_NOT_FOUND',
-        pageNotFound: true
+        pageNotFoundDetail: true
+    }
+}
+
+//Responsavel por setar a categoria selecionada
+export const setCategory= (category) => {
+    return {
+        type: 'SET_CATEGORY',
+        category
     }
 }

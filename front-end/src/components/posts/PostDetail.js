@@ -76,7 +76,7 @@ class PostDetail extends Component {
 
     //Responsavel por buscar os comentario do post
     buscarComentario = () => {
-        let id = this.props.match.params.id;
+        let id = this.props.match.params.post_id;
         this.props.fetchComments(id);    
     }
 
