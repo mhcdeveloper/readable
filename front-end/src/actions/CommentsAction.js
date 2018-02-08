@@ -16,6 +16,14 @@ export const fetchComments = (id) => dispatch => {
         .then((comments) => dispatch(getAllComments(comments)));
 }
 
+//Responsavel por setar o comment que será editado na store do redux
+export const fetchCommentToEdit = (commentEdit) => {
+    return {
+        type: 'SET_COMMENT_EDIT',
+        commentEdit
+    }
+}
+
 //Responsavel por setar o novo scorte no redux
 export const voteScoreCommentRedux = (comment) => {
     return {
@@ -90,5 +98,12 @@ export const openModalRemoveCommentRedux = () => {
 export const openModalCommentRedux = () => {
     return {
         type: 'OPEN_MODAL_COMMENT'
+    }
+}
+
+//Responsavel por abrir o modal mas para inserir um novo comment
+export const openModalToNewComment = () => {
+    return {
+        type: 'OPEN_MODAL_TO_NEW_COMMENT'
     }
 }

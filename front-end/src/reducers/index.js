@@ -20,11 +20,12 @@ const initialPostsState = {
     isModalRemove: false,
     loadingPosts: true,
     pageNotFoundDetail: false,
-    category: ''
+    category: '',
+    postDetail: {}
 }
 
 function postReducer  (state = initialPostsState, action) {
-    const { post, payload, postDetail, pageNotFoundDetail, category } = action;
+    const { post, payload, postDetail, pageNotFoundDetail, category, typePost } = action;
     switch (action.type) {
         case 'GET_ALL_POST':
             return {
@@ -54,7 +55,7 @@ function postReducer  (state = initialPostsState, action) {
             return removePost(state, post.id)
         
         case 'VOTE_SCORE_POST':
-            return addVotePost(state, post, post.voteScore)
+            return addVotePost(state, post, post.voteScore, typePost)
         
         case 'OPEN_MODAL_REMOVE' :
             return {
@@ -75,6 +76,12 @@ function postReducer  (state = initialPostsState, action) {
                 postsByCategory: category
             }
         
+        case 'SET_POST_DETAIL' :
+            return {
+                ...state,
+                postDetail
+            }
+        
         default :
             return state;
     }
@@ -85,6 +92,7 @@ const updatePost = (state, post) => {
     return {
         ...state,
         posts: updateObjectInArrayById(state.posts, post),
+        postDetail: post,
         modalIsOpen: !state.modalIsOpen
     }
 }
@@ -94,27 +102,35 @@ const removePost = (state, postId) => {
     return { 
         ...state,
         posts: removeObjectInArrayById(state.posts, postId),
+        postDetail: {},
         redirect: !state.redirect
     }
 }
 
 //Metodo responsavel pelo voteScore do post
-const addVotePost = (state, post, voteScore) => {
+const addVotePost = (state, post, voteScore, typePost) => {
     const index = state.posts.findIndex(item => item.id === post.id)
-
-    const newPost = {
-        ...state.posts[index],
-        voteScore
+    if(typePost === 'postItem'){
+        const newPost = {
+            ...state.posts[index],
+            voteScore
+        }
+    
+        return {
+            ...state,
+            posts: [
+                ...state.posts.slice(0,  index),
+                newPost,
+                ...state.posts.slice(index + 1, state.posts.length)
+            ]
+        }
+    } else {
+        return {
+            ...state,
+            postDetail: post
+        }
     }
 
-	return {
-        ...state,
-        posts: [
-            ...state.posts.slice(0,  index),
-            newPost,
-            ...state.posts.slice(index + 1, state.posts.length)
-        ]
-    }
 }
 
 /*FIM REDUCER DE POSTS */
@@ -126,12 +142,15 @@ const initialCommentState = {
     comments: [],
     modalIsOpen: false,
     isModalRemove: false,
-    modalIsOpenComment: false
+    modalIsOpenComment: false,
+    commentEdit: {},
+    newComment: false
 }
 
 
 function commentReducer (state = initialCommentState, action) {
-    const { comment, voteScore, payload, commentId, postId } = action;
+    const { comment, commentEdit, voteScore, payload, commentId, postId } = action;
+    console.log(commentEdit)
     switch (action.type) {
         case 'GET_ALL_COMMENTS' :
             return {
@@ -152,15 +171,29 @@ function commentReducer (state = initialCommentState, action) {
         case 'REMOVE_COMMENT' :
             return removeComment(state, commentId)
         
+        case 'SET_COMMENT_EDIT' :
+            return {
+                ...state,
+                commentEdit
+            }
+
         case 'VOTE_SCORE_COMMENT' :
             return addVote(state, comment, voteScore)
         
         case 'OPEN_MODAL_COMMENT':
             return {
                 ...state,
-                modalIsOpenComment: !state.modalIsOpenComment
+                modalIsOpenComment: !state.modalIsOpenComment,
+                newComment: false
             }
         
+        case 'OPEN_MODAL_TO_NEW_COMMENT' :
+            return {
+                ...state,
+                modalIsOpenComment: true,
+                newComment: true
+            }
+
         case 'OPEN_MODAL_REMOVE' :
             return {
                     ...state,
@@ -190,7 +223,7 @@ const removeComment = (state, commentId) => {
     //state.comments.filter(item => item.id !== commentId)
     return { 
         ...state,
-        comments: removeObjectInArrayById(state.posts, commentId)
+        comments: state.comments.filter(item => item.id !== commentId)
     }
 }
 

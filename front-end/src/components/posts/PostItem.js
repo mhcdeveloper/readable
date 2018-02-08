@@ -13,7 +13,8 @@ class PostItem extends Component {
     votePost = (post, option) => {
         const vote = {
             post,
-            option
+            option,
+            typePost: 'postItem'
         }
         this.props.voteScorePost(vote);
     }

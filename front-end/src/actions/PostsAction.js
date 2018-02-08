@@ -4,6 +4,7 @@ import {
     UPDATE_POST,
     DELETE_POST
 } from './index';
+import { fetchComments } from './CommentsAction';
 
 //Responsavel por setar no redux todos os posts
 export const setPostsRedux = (posts, category) => {  
@@ -41,19 +42,42 @@ export const createPost = (post) => dispatch => {
 }
 
 //Responsavel por setar o voteScore
-export const voteScorePostRedux = (post) => {
+export const voteScorePostRedux = (post, typePost) => {
     return {
         type: 'VOTE_SCORE_POST',
         post,
-        voteScore: post.voteScore
+        voteScore: post.voteScore,
+        typePost
     }
 }
 
 //Responsavel por fazer o vote score do post
 export const voteScorePost = (vote) => dispatch => {
     ReadableAPI.voteScorePost(vote)
-        .then(res => dispatch(voteScorePostRedux(res)))
+        .then(res => dispatch(voteScorePostRedux(res, vote.typePost)))
         .catch(err => console.log(err));
+}
+
+//Responsavel por setar o post detail no store do redux
+export const setPostDetailRedux = (post) => {
+    return {
+        type: 'SET_POST_DETAIL',
+        postDetail: post
+    }
+}
+
+//Responsavel por buscar o detail do post
+export const fetchPostDetail = (id) => dispatch => {
+    ReadableAPI.getDetail(id)
+            .then((post) => {
+                if(post.id === undefined) {
+                    //this.setState({ pageNotFound: true });
+                    dispatch(pageNotFound())                
+                } else {
+                    dispatch(fetchComments(id))
+                    dispatch(setPostDetailRedux(post))
+                }
+            })
 }
 
 //Responsavel por setar o post no redux

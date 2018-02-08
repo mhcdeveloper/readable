@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange, categories }) => {
+const ModalPost =  ({ isOpen, closeModal, post, insertPost, handleChange, categories }) => {
     return (
         <div>
             <Modal
@@ -67,7 +67,7 @@ const ModalPost = ({ isOpen, closeModal, post, insertPost, handleChange, categor
                 </div>
             </Modal>
         </div>
-    );
+    )
 }
 
 export default ModalPost;
