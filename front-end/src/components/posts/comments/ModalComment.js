@@ -24,14 +24,14 @@ const ModalComment = ({ isOpen, closeModal, comment, insertComment, handleChange
                                 <div className="row">
                                     <div className="col-md-12">
                                         <label htmlFor="body">Body</label>
-                                        <input type="text" name="body" className="form-control" id="body" placeholder="Descrição" value={comment.body} onChange={handleChange.bind(this)} required/>
+                                        <input type="text" name="body" className="form-control" id="body" placeholder="Descrição" value={comment.body} onChange={handleChange} required/>
                                     </div>
                                 </div>
                                 <br />
                                 <div className="row">
                                     <div className="col-md-12">
                                         <label htmlFor="author">Author</label>
-                                        <input type="text" name="author" className="form-control" id="author" placeholder="Author" value={comment.author} onChange={handleChange.bind(this)} required/>
+                                        <input type="text" name="author" className="form-control" id="author" placeholder="Author" value={comment.author} onChange={handleChange} required/>
                                     </div>
                                 </div>
                                 <br />

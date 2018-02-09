@@ -27,12 +27,20 @@ class PostDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            commentEdit: {
+                id: '',
+                body: '',
+                author: '',
+                postId: ''
+            },
             modalIsOpen: false,
             isModalRemove: false,
             modalIsOpenComment: false,
             categories: [],
             category: '',
         }
+
+        this.handleChangeEditComment = this.handleChangeEditComment.bind(this);
     }
 
     componentDidMount() {
@@ -54,10 +62,24 @@ class PostDetail extends Component {
     }
     
     //Responsavel por abrir o dialog com os input setado
-    openEditComment = (comment) => {
-        this.props.fetchCommentToEdit(comment);
+    openEditComment = (commentEdit) => {
+        //this.props.fetchCommentToEdit(comment);
+        this.setState({ 
+            commentEdit
+         })
         this.props.openModalCommentRedux();
     }    
+
+    //Metodo responsavel por atualizar o state de cada input
+    handleChangeEditComment = (e) => {
+        this.setState({
+            commentEdit: {
+                ...this.state.commentEdit,
+                [e.target.name]: e.target.value
+            },
+        });
+    }
+
     
     //Responsavel por abrir o dialog com os input setado
     openEditPost = (post) => {
@@ -90,7 +112,7 @@ class PostDetail extends Component {
             postDetail,
             pageNotFoundDetail
         } = this.props;
-        const { comment, categories } = this.state;
+        const { commentEdit, categories } = this.state;
 
         if(pageNotFoundDetail === true) {
             return <Redirect to='/error' />
@@ -134,7 +156,9 @@ class PostDetail extends Component {
                 }
                 <div>
                     <NewEdiComment 
-                        postDetail={postDetail} />
+                        postDetail={postDetail}
+                        commentEdit={commentEdit}
+                        handleChangeEditComment={this.handleChangeEditComment} />
                 </div>
                 <div>
                     <NewEditPost 

@@ -17,7 +17,7 @@ class NewEditComment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            comment: {
+            commentNew: {
                 id: '',
                 body: '',
                 author: '',
@@ -30,40 +30,24 @@ class NewEditComment extends Component {
                 postId: ''
             }
         }
+
+        this.handleChangeNewComment = this.handleChangeNewComment.bind(this);
     }
 
-    componentWillReceiveProps() {
-        const { commentEdit } = this.props;
-        if(commentEdit) {
-            this.setState({ commentDetail: commentEdit })
-        }
-    }
-    
-    //Metodo responsavel por atualizar o state de cada input
-    handleChange = (e) => {
-        const { newComment } = this.props;
-        e.preventDefault();
-        if( newComment ) {
-            this.setState({
-                comment: {
-                    ...this.state.comment,
-                    [e.target.name]: e.target.value
-                },
-            });    
-        } else {
-            this.setState({
-                commentDetail: {
-                    ...this.state.commentDetail,
-                    [e.target.name]: e.target.value
-                },
-            });
-        }
+    //Metodo responsavel por atualizar o state de cada input do novo comment
+    handleChangeNewComment = (e) => {
+        this.setState({
+            commentNew: {
+                ...this.state.commentNew,
+                [e.target.name]: e.target.value
+            },
+        });    
     }
 
     //Responsavel por fechar ou abrir o modal do comment
     changeOpenComment = () => {
         this.setState({ 
-            comment: {
+            commentNew: {
                 id: '',
                 body: '',
                 author: '',
@@ -93,16 +77,17 @@ class NewEditComment extends Component {
     }
     
     render () {
-        const { comment } = this.state;
-        const { modalIsOpenComment, newComment, commentEdit } = this.props;
+        const { commentNew, commentDetail } = this.state;
+        const { modalIsOpenComment, newComment, commentEdit, handleChangeEditComment } = this.props;
+        console.log(newComment)
         return (
             <div>
                 <ModalComment 
                     isOpen={modalIsOpenComment}
                     closeModal={this.changeOpenComment}
-                    comment={ newComment ? comment : commentEdit}
+                    comment={ newComment ? commentNew : commentEdit}
                     insertComment={this.insertComment}
-                    handleChange={this.handleChange}
+                    handleChange={ newComment ? this.handleChangeNewComment : handleChangeEditComment}
                 />
             </div>
         )
@@ -111,7 +96,6 @@ class NewEditComment extends Component {
 
 const mapStatToProps = ({ commentReducer }) => ({
     modalIsOpenComment: commentReducer.modalIsOpenComment,
-    commentEdit: commentReducer.commentEdit,
     newComment: commentReducer.newComment
 })
 
