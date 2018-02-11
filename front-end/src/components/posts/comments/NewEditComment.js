@@ -62,6 +62,7 @@ class NewEditComment extends Component {
         e.preventDefault();
         const { postDetail } = this.props;
         let parentId = postDetail.id;
+        console.log(parentId)
         const values = serializeForm(e.target, { hash: true });
         if (values.id) {
             this.editComment(values);
@@ -79,7 +80,6 @@ class NewEditComment extends Component {
     render () {
         const { commentNew, commentDetail } = this.state;
         const { modalIsOpenComment, newComment, commentEdit, handleChangeEditComment } = this.props;
-        console.log(newComment)
         return (
             <div>
                 <ModalComment 
@@ -100,7 +100,7 @@ const mapStatToProps = ({ commentReducer }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    createComment: (comment) => dispatch(createComment(comment)),
+    createComment: (comment, parentId) => dispatch(createComment(comment, parentId)),
     updateComment: (comment) => dispatch(updateComment(comment)),
     openModalCommentRedux: () => dispatch(openModalCommentRedux())
 })
