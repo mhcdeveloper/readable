@@ -74,6 +74,7 @@ export const fetchPostDetail = (id) => dispatch => {
                     //this.setState({ pageNotFound: true });
                     dispatch(pageNotFound())                
                 } else {
+                    console.log('ok')
                     dispatch(fetchComments(id))
                     dispatch(setPostDetailRedux(post))
                 }

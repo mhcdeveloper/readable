@@ -3,7 +3,6 @@ import { GET_ALL_COMMENTS } from './index';
 
 //Responsável por setar no redux os comments
 export const getAllComments = (comments) => {  
-    console.log(comments);
     return {
         type: 'GET_ALL_COMMENTS',
         payload: comments

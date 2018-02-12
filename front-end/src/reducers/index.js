@@ -150,7 +150,6 @@ const initialCommentState = {
 
 function commentReducer (state = initialCommentState, action) {
     const { comment, commentEdit, voteScore, payload, commentId, postId } = action;
-    console.log(commentEdit)
     switch (action.type) {
         case 'GET_ALL_COMMENTS' :
             return {

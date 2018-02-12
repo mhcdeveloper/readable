@@ -117,8 +117,9 @@ class PostDetail extends Component {
         if(pageNotFoundDetail === true) {
             return <Redirect to='/error' />
         }
+        
         //Responsavel por fazer o redirect quando for deletado o post
-        else if(redirect) {
+        if(redirect) {
             return <Redirect to='/' />
         }
         return (
@@ -172,7 +173,8 @@ class PostDetail extends Component {
 const mapStateToProps = ({ commentReducer, postReducer }) => ({
     comments: commentReducer.comments,
     postDetail: postReducer.postDetail,
-    pageNotFoundDetail: postReducer.pageNotFoundDetail
+    pageNotFoundDetail: postReducer.pageNotFoundDetail,
+    redirect: postReducer.redirect
 })
 
 const mapDispatchToProps = dispatch => ({

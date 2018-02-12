@@ -1,3 +1,4 @@
+const uui = require('uuid/v1');
 const url = "http://localhost:3001"
 
 // Generate a unique token for storing your bookshelf data on the backend server.
@@ -56,7 +57,7 @@ export const createPost = (post) => {
   return (
     fetch(`${url}/posts/`,{ method: 'POST',  headers: { ...headers, 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        id: Math.round(id),
+        id: uui(),
         timestamp: Date.now(),
         title: post.title,
         body: post.body,
@@ -144,7 +145,7 @@ export const createComment = (comment, parentId) => {
   return (
     fetch(`${url}/comments/`,{ method: 'POST',  headers: { ...headers, 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        id: Math.round(id),
+        id: uui(),
         timestamp: Date.now(),
         body: comment.body,
         author: comment.author, 
