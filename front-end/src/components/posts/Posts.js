@@ -151,11 +151,6 @@ class Posts extends Component {
         const { post, filter, filters } = this.state;
         const { posts, categories, category, isModalRemove, modalIsOpen, openModalPostRedux, loadingPosts } = this.props;
 
-        if(category){
-            return (
-                <Redirect to={`/${category}`} />
-            )
-        } 
         return (
             <div>
                 <div className="row">
